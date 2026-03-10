@@ -1,0 +1,983 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avyan Pragati - Unified Digital Governance Portal</title>
+    <link rel="icon" type="image/png" href="avyanpragati.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main website.css">
+    <style>
+        
+        .svc-links { list-style: none; padding: 0; margin: 14px 0 0; border-top: 1.5px solid #f1f5f9; padding-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .svc-links li a {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; font-weight: 500; color: #374151;
+            text-decoration: none; padding: 5px 8px; border-radius: 8px;
+            transition: all .18s;
+        }
+        .svc-links li a:hover { background: #fff7ed; color: #FF9933; }
+        .svc-links li a i.fa-circle { font-size: 6px; color: #FF9933; flex-shrink: 0; }
+        .svc-links li a .svc-link-name { flex: 1; }
+        .svc-links li a .svc-ext { font-size: 10px; color: #d1d5db; flex-shrink: 0; }
+        .svc-links li a:hover .svc-ext { color: #FF9933; }
+        .services-grid { grid-template-columns: repeat(3, 1fr); }
+        @media (max-width: 1100px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px)  { .services-grid { grid-template-columns: 1fr; } }
+
+        
+        #ic-splash {
+            position: fixed; inset: 0; z-index: 99999;
+            background: linear-gradient(160deg, #0a0f1c 0%, #0f172a 50%, #1c0c02 100%);
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #ic-splash.ic-splash-out { opacity: 0; visibility: hidden; pointer-events: none; }
+        .ic-splash-inner {
+            text-align: center; display: flex; flex-direction: column;
+            align-items: center; gap: 10px;
+            animation: icSplashIn 0.65s cubic-bezier(0.34,1.4,0.64,1) both;
+        }
+        @keyframes icSplashIn {
+            from { opacity:0; transform: translateY(22px) scale(0.9); }
+            to   { opacity:1; transform: none; }
+        }
+        .ic-splash-logo-wrap { position: relative; margin-bottom: 6px; }
+        .ic-splash-icon {
+            width:86px; height:86px; border-radius:26px;
+            background: linear-gradient(135deg,#f97316,#fb923c);
+            display:flex; align-items:center; justify-content:center;
+            font-size:38px; color:#fff; position:relative; z-index:1; margin:0 auto;
+            box-shadow: 0 10px 40px rgba(249,115,22,0.45);
+        }
+        .ic-splash-ring {
+            position:absolute; inset:-14px; border-radius:40px;
+            border:2px solid rgba(249,115,22,0.2);
+            animation: icRingPulse 2.2s ease-in-out infinite;
+        }
+        .ic-splash-ring2 {
+            position:absolute; inset:-26px; border-radius:52px;
+            border:1px solid rgba(249,115,22,0.08);
+            animation: icRingPulse 2.2s 0.6s ease-in-out infinite;
+        }
+        @keyframes icRingPulse {
+            0%,100%{ transform:scale(1); opacity:0.5; }
+            50%{ transform:scale(1.06); opacity:1; }
+        }
+        .ic-splash-brand {
+            font-size:30px; font-weight:800; color:#f8fafc; letter-spacing:-0.02em;
+            animation: icFadeUp 0.5s 0.22s both;
+        }
+        .ic-splash-tagline {
+            font-size:11px; font-weight:600; color:#475569;
+            text-transform:uppercase; letter-spacing:0.15em;
+            animation: icFadeUp 0.5s 0.38s both;
+        }
+        @keyframes icFadeUp { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:none;} }
+        .ic-splash-bar-wrap {
+            width:180px; height:3px;
+            background:rgba(255,255,255,0.07); border-radius:100px;
+            overflow:hidden; margin-top:20px;
+            animation: icFadeUp 0.5s 0.5s both;
+        }
+        .ic-splash-bar {
+            height:100%; width:0;
+            background:linear-gradient(90deg,#f97316,#fbbf24);
+            border-radius:100px;
+            transition: width 2.2s cubic-bezier(0.25,0.1,0.25,1);
+        }
+        .ic-splash-note {
+            font-size:11.5px; color:#1e3a5f; letter-spacing:0.03em;
+            animation: icFadeUp 0.5s 0.62s both; margin-top:2px;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <div id="ic-splash">
+        <div class="ic-splash-inner">
+            <div class="ic-splash-logo-wrap">
+                <div class="ic-splash-icon"><i class="fas fa-landmark"></i></div>
+                <div class="ic-splash-ring"></div>
+                <div class="ic-splash-ring2"></div>
+            </div>
+            <div class="ic-splash-brand">Avyan Pragati</div>
+            <div class="ic-splash-tagline">Digital Governance Portal</div>
+            <div class="ic-splash-bar-wrap">
+                <div class="ic-splash-bar" id="ic-splash-bar"></div>
+            </div>
+            <div class="ic-splash-note">Connecting you to governance&hellip;</div>
+        </div>
+    </div>
+
+    
+    <div class="tricolor-bar"></div>
+
+    
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    
+    <header id="header">
+        <div class="header-top">
+            <div class="header-top-left">
+                <span><i class="fas fa-phone-alt"></i> <span data-translate="toll-free">1800-111-555 (Toll Free)</span></span>
+                <span><i class="fas fa-envelope"></i> <span data-translate="support-email">support@avyanpragati.gov.in</span></span>
+            </div>
+            <div class="header-top-right">
+                <button class="lang-btn" id="hindi-btn" data-lang="hi">हिन्दी</button>
+                <button class="lang-btn" id="english-btn" data-lang="en">English</button>
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark</span>
+                </button>
+            </div>
+        </div>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <img src="avyanpragati.png" alt="Avyan Pragati" style="height:36px;width:36px;object-fit:contain;border-radius:6px;">
+                </div>
+                <div class="logo-text">
+                    <span class="brand" data-translate="brand-name">Avyan Pragati</span>
+                    <span class="tagline" data-translate="tagline">Digital Governance Portal</span>
+                </div>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#services" class="active" data-translate="services">Services</a></li>
+                <li><a href="#features" data-translate="features">Features</a></li>
+                <li><a href="#news" data-translate="updates">Updates</a></li>
+            </ul>
+            <div class="search-box">
+                <input type="text" placeholder="Search services..." data-translate="search-placeholder">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="nav-auth">
+                <div id="nav-auth-container">
+                    <a href="profile.html" class="btn-profile" style="display: none;" id="profile-link"><i class="fas fa-user-circle"></i> <span data-translate="my-account">My Account</span></a>
+                    <button class="btn-login" onclick="window.location.href='sign-up.html'" id="signup-btn"><i class="fas fa-user-plus"></i> <span data-translate="sign-up">Sign Up</span></button>
+                    <button class="btn-login" onclick="window.location.href='login.html'" id="login-btn"><i class="fas fa-sign-in-alt"></i> <span data-translate="login">Login</span></button>
+                    <button class="btn-login" style="background: #DC2626; border-color: #DC2626; display: none;" onclick="logoutUser()" id="logout-btn"><i class="fas fa-sign-out-alt"></i> <span data-translate="logout">Logout</span></button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    
+    <section class="hero">
+        
+        <div class="hero-blob blob-saffron"></div>
+        <div class="hero-blob blob-white"></div>
+        <div class="hero-blob blob-green"></div>
+        <div class="hero-glass-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span data-translate="govt-portal">Government of India - Secure Portal</span>
+            </div>
+            <h1><span data-translate="hero-title">One Nation,</span><br><span class="highlight" data-translate="hero-highlight">One Digital Gateway</span></h1>
+            <p data-translate="hero-desc">Access government services, file complaints, track progress, and participate in nation-building - all from a single, unified platform.</p>
+            <div class="hero-btn">
+                <a href="#services" class="btn btn-primary"><i class="fas fa-rocket"></i> <span data-translate="explore-services">Explore Services</span></a>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="section section-white" id="services">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge"><i class="fas fa-th-large"></i> <span data-translate="services-badge">Services</span></div>
+                <h2 class="section-title" data-translate="services-title">Central Government Services at Your Fingertips</h2>
+                <p class="section-subtitle" data-translate="services-subtitle">Access essential services and schemes designed for every citizen of India</p>
+            </div>
+            <div class="services-grid">
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon"><i class="fas fa-id-card"></i></div>
+                    <h3 data-translate="identity-docs">Identity &amp; Documents</h3>
+                    <p data-translate="identity-docs-desc">Apply for Aadhaar, Passport, Voter ID, PAN and other official documents seamlessly.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://uidai.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Aadhaar Services</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://passportindia.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Passport Services</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://www.onlineservices.nsdl.com" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">PAN Card Services</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://voters.eci.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Voter ID Services</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://digilocker.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">DigiLocker</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 data-translate="education-schemes">Education &amp; Scholarships</h3>
+                    <p data-translate="education-schemes-desc">Scholarships, education loans, and support programs for students across India.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://scholarships.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">National Scholarship Portal</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://www.aicte-india.org" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">AICTE Scholarships</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://skillindia.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Skill India</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://ncs.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">National Career Service</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon"><i class="fas fa-heartbeat"></i></div>
+                    <h3 data-translate="healthcare-services">Healthcare Services</h3>
+                    <p data-translate="healthcare-services-desc">Ayushman Bharat, health insurance, medical assistance and wellness programs.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://pmjay.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Ayushman Bharat</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://abha.abdm.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">ABHA Health ID</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://esanjeevani.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">eSanjeevani Telemedicine</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3 data-translate="employment-skill">Employment &amp; Skills</h3>
+                    <p data-translate="employment-skill-desc">Job portals, skill development initiatives, and employment assistance programs.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://apprenticeshipindia.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Apprenticeship India</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://ncs.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">National Career Service</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://msde.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Skill Development Portal</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon"><i class="fas fa-home"></i></div>
+                    <h3 data-translate="housing-schemes">Housing Schemes</h3>
+                    <p data-translate="housing-schemes-desc">PM Awas Yojana, affordable housing and property registration services.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://pmaymis.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">PM Awas Yojana</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon"><i class="fas fa-hands-helping"></i></div>
+                    <h3 data-translate="social-welfare">Social Welfare</h3>
+                    <p data-translate="social-welfare-desc">Pension schemes, disability benefits, and welfare programs for all citizens.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://nsap.nic.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">National Social Assistance</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://npscra.nsdl.co.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Atal Pension Yojana</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon" style="background:#f0fdf4;"><i class="fas fa-seedling" style="color:#16a34a;"></i></div>
+                    <h3>Agriculture</h3>
+                    <p>Farmer-first portals for crop insurance, subsidies, soil health and market connectivity.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://pmkisan.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">PM-Kisan</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://pmfby.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Crop Insurance (PMFBY)</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://enam.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">eNAM Agriculture Market</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://soilhealth.dac.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Soil Health Card</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon" style="background:#fdf4ff;"><i class="fas fa-rocket" style="color:#9333ea;"></i></div>
+                    <h3>Business &amp; Startup</h3>
+                    <p>Register your startup, MSME, or enterprise and access government procurement platforms.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://startupindia.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Startup India</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://udyamregistration.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Udyam MSME Registration</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://gem.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Govt e-Marketplace (GeM)</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon" style="background:#eff6ff;"><i class="fas fa-file-invoice-dollar" style="color:#2563eb;"></i></div>
+                    <h3>Taxes &amp; Finance</h3>
+                    <p>File income tax returns, pay GST, and manage your financial obligations online.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://incometax.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Income Tax Portal</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://gst.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">GST Portal</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon" style="background:#fff7ed;"><i class="fas fa-car" style="color:#ea580c;"></i></div>
+                    <h3>Transport</h3>
+                    <p>Vehicle registration, driving licences, FASTag and road transport services.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://parivahan.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">Parivahan Services</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                        <li><a href="https://fastag.ihmcl.com" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">FASTag Services</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon" style="background:#fef2f2;"><i class="fas fa-shield-alt" style="color:#dc2626;"></i></div>
+                    <h3>Public Safety</h3>
+                    <p>Report cybercrime, fraud, and online offences through official government channels.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://cybercrime.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">National Cybercrime Portal</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+                
+                <div class="service-card animate-in">
+                    <div class="service-icon" style="background:#f0f9ff;"><i class="fas fa-comments" style="color:#0284c7;"></i></div>
+                    <h3>Grievance Portal</h3>
+                    <p>Lodge and track public grievances with central government ministries and departments.</p>
+                    <ul class="svc-links">
+                        <li><a href="https://pgportal.gov.in" target="_blank" rel="noopener"><i class="fas fa-circle"></i><span class="svc-link-name">CPGRAMS Grievance Portal</span><i class="fas fa-external-link-alt svc-ext"></i></a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="section section-white" id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge"><i class="fas fa-star"></i> <span>Platform Features</span></div>
+                <h2 class="section-title">Everything You Need, In One Place</h2>
+                <p class="section-subtitle">Avyan Pragati is the unified digital gateway bridging central &amp; state government services, civic reporting, and citizen participation</p>
+            </div>
+            <div class="features-showcase-grid">
+                <div class="feature-card-big animate-in">
+                    <div class="feature-card-icon" style="background:#fff3e0;"><i class="fas fa-layer-group" style="color:#f97316;"></i></div>
+                    <div class="feature-card-body">
+                        <h3>Unified Government Portal</h3>
+                        <p>One platform connects every central ministry, department, and scheme — no more hunting across dozens of separate websites.</p>
+                    </div>
+                </div>
+                <div class="feature-card-big animate-in">
+                    <div class="feature-card-icon" style="background:#e0f2fe;"><i class="fas fa-map-marked-alt" style="color:#0284c7;"></i></div>
+                    <div class="feature-card-body">
+                        <h3>My Region Dashboard</h3>
+                        <p>Personalized state &amp; district map, local government links, land records, police portals, and region-specific services — all in one place.</p>
+                    </div>
+                </div>
+                <div class="feature-card-big animate-in">
+                    <div class="feature-card-icon" style="background:#f0fdf4;"><i class="fas fa-landmark" style="color:#16a34a;"></i></div>
+                    <div class="feature-card-body">
+                        <h3>Central Government Services</h3>
+                        <p>Direct access to 12 service categories — Identity Documents, Health, Education, Housing, Employment, Finance, Transport, Agriculture, and more.</p>
+                    </div>
+                </div>
+                <div class="feature-card-big animate-in">
+                    <div class="feature-card-icon" style="background:#fdf4ff;"><i class="fas fa-flag" style="color:#9333ea;"></i></div>
+                    <div class="feature-card-body">
+                        <h3>All 36 State &amp; UT Portals</h3>
+                        <p>State government portals, police citizen services, grievance portals, and land record systems for every state and Union Territory.</p>
+                    </div>
+                </div>
+                <div class="feature-card-big animate-in">
+                    <div class="feature-card-icon" style="background:#fef9c3;"><i class="fas fa-exclamation-circle" style="color:#ca8a04;"></i></div>
+                    <div class="feature-card-body">
+                        <h3>Report &amp; Track Civic Issues</h3>
+                        <p>File geo-tagged complaints with video evidence, track resolution status in real-time, and verify contractor work with a transparent timeline.</p>
+                    </div>
+                </div>
+                <div class="feature-card-big animate-in">
+                    <div class="feature-card-icon" style="background:#fff1f2;"><i class="fas fa-rss" style="color:#e11d48;"></i></div>
+                    <div class="feature-card-body">
+                        <h3>Personalized Schemes Feed</h3>
+                        <p>Government schemes, subsidies, and programs curated to your profile, location, age group, and interests — updated in real time.</p>
+                    </div>
+                </div>
+                <div class="feature-card-big animate-in">
+                    <div class="feature-card-icon" style="background:#ecfdf5;"><i class="fas fa-poll" style="color:#059669;"></i></div>
+                    <div class="feature-card-body">
+                        <h3>Civic Engagement Hub</h3>
+                        <p>Vote in government polls, submit policy suggestions, join national discussions, and participate in MyGov-style campaigns and tasks.</p>
+                    </div>
+                </div>
+                <div class="feature-card-big animate-in">
+                    <div class="feature-card-icon" style="background:#eff6ff;"><i class="fas fa-language" style="color:#2563eb;"></i></div>
+                    <div class="feature-card-body">
+                        <h3>Multilingual &amp; Accessible</h3>
+                        <p>Full Hindi and English support across every section. Designed for accessibility on mobile, tablet, and desktop for every citizen.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <style>
+        .features-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+            margin-top: 40px;
+        }
+        @media (max-width: 1024px) { .features-showcase-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .features-showcase-grid { grid-template-columns: 1fr; } }
+        .feature-card-big {
+            background: #fff;
+            border: 1.5px solid #f1f5f9;
+            border-radius: 18px;
+            padding: 24px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .feature-card-big:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.10); }
+        .feature-card-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .feature-card-icon i { font-size: 22px; }
+        .feature-card-body h3 { font-size: 15px; font-weight: 700; color: #1e293b; margin: 0 0 6px; }
+        .feature-card-body p { font-size: 13px; color: #64748b; line-height: 1.65; margin: 0; }
+    </style>
+
+    
+    <section class="section section-alt" id="news">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge"><i class="fas fa-newspaper"></i> <span data-translate="news-badge">Latest Updates</span></div>
+                <h2 class="section-title" data-translate="news-title">News &amp; Announcements</h2>
+                <p class="section-subtitle" data-translate="news-subtitle">Stay informed about the latest government announcements and policy updates</p>
+            </div>
+            <div class="news-grid">
+                <div class="news-card animate-in">
+                    <div class="news-image saffron-bg">&#x1F4E2;</div>
+                    <div class="news-content">
+                        <div class="news-date">March 3, 2026</div>
+                        <h3>New Employment Scheme for 5 Million Jobs</h3>
+                        <p>Government introduces a comprehensive employment program targeting multiple sectors including IT, manufacturing, and agriculture.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="news-card animate-in">
+                    <div class="news-image green-bg">&#x1F393;</div>
+                    <div class="news-content">
+                        <div class="news-date">March 1, 2026</div>
+                        <h3>Education Scholarship Benefits Extended</h3>
+                        <p>Scholarship benefits expanded to cover more students from economically weaker sections across all states.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="news-card animate-in">
+                    <div class="news-image blue-bg">&#x1F3E5;</div>
+                    <div class="news-content">
+                        <div class="news-date">February 28, 2026</div>
+                        <h3>Healthcare Initiative for 10 Crore Families</h3>
+                        <p>New health insurance scheme provides comprehensive coverage to additional families across India.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section footer-brand">
+                <div class="logo-text">
+                    <span class="brand" data-translate="brand-name"><img src="avyanpragati.png" alt="Avyan Pragati" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;border-radius:3px;">&nbsp; Avyan Pragati</span>
+                    <span class="tagline" data-translate="tagline">Digital Governance Portal</span>
+                </div>
+                <p data-translate="footer-description">Avyan Pragati is the unified digital platform of the Government of India, providing seamless access to public services, grievance redressal, and citizen participation.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4 data-translate="footer-services">Services</h4>
+                <ul>
+                    <li><a href="#" data-translate="footer-document-services">Document Services</a></li>
+                    <li><a href="#" data-translate="footer-healthcare">Healthcare</a></li>
+                    <li><a href="#" data-translate="footer-education">Education Support</a></li>
+                    <li><a href="#" data-translate="footer-employment">Employment Help</a></li>
+                    <li><a href="#" data-translate="footer-housing">Housing Schemes</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4 data-translate="footer-quick-links">Quick Links</h4>
+                <ul>
+                    <li><a href="#">MyGov.in</a></li>
+                    <li><a href="#">india.gov.in</a></li>
+                    <li><a href="#">Digital India</a></li>
+                    <li><a href="#">RTI Online</a></li>
+                    <li><a href="#">Data.gov.in</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4 data-translate="footer-support">Support</h4>
+                <ul>
+                    <li><a href="#" data-translate="footer-help-center">Help Center</a></li>
+                    <li><a href="#" data-translate="footer-faqs">FAQs</a></li>
+                    <li><a href="#" data-translate="footer-contact">Contact Us</a></li>
+                    <li><a href="#" data-translate="footer-report">Report Issues</a></li>
+                    <li><a href="#" data-translate="footer-accessibility">Accessibility</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p data-translate="footer-copyright">&copy; 2026 Avyan Pragati - Government of India. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#" data-translate="footer-privacy">Privacy Policy</a>
+                <a href="#" data-translate="footer-terms">Terms of Service</a>
+                <a href="#" data-translate="footer-accessibility">Accessibility</a>
+                <a href="#" data-translate="footer-sitemap">Sitemap</a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { auth, signOut, onAuthStateChanged } from './firebase-config.js';
+        import { translations, applyTranslations } from './translations.js';
+
+        const savedLang = localStorage.getItem('language') || 'en';
+
+        function switchLang(lang) {
+            localStorage.setItem('language', lang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            applyTranslations(lang);
+        }
+
+        document.getElementById('hindi-btn').addEventListener('click', () => switchLang('hi'));
+        document.getElementById('english-btn').addEventListener('click', () => switchLang('en'));
+
+        switchLang(savedLang);
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            updateAuthButtons();
+        });
+
+        function updateAuthButtons() {
+            const profileLink = document.getElementById('profile-link');
+            const signupBtn = document.getElementById('signup-btn');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (currentUser) {
+                window.location.href = 'logged main.html';
+                return;
+            } else {
+                profileLink.style.display = 'none';
+                signupBtn.style.display = 'inline-flex';
+                loginBtn.style.display = 'inline-flex';
+                logoutBtn.style.display = 'none';
+            }
+        }
+
+        window.logoutUser = function() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            const message = currentLang === 'hi' ? 
+                'क्या आप वाकई लॉगआउट करना चाहते हैं?' : 
+                'Are you sure you want to logout?';
+            const successMsg = currentLang === 'hi' ? 
+                'आप सफलतापूर्वक लॉग आउट हो गए हैं।' : 
+                'You have been logged out successfully.';
+
+            if (confirm(message)) {
+                signOut(auth).then(() => {
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('userSignupData');
+                    alert(successMsg);
+                    updateAuthButtons();
+                }).catch((error) => {
+                    console.error('Logout error:', error);
+                    alert('Error logging out. Please try again.');
+                });
+            }
+        };
+    </script>
+
+    
+    <script>
+        window.addEventListener('scroll', function() {
+            var scrollProgress = document.getElementById('scroll-progress');
+            var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (window.scrollY / scrollHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+            var header = document.getElementById('header');
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                var href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    var target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+
+
+        var themeToggle = document.getElementById('theme-toggle');
+        var themeIcon = themeToggle.querySelector('i');
+        var themeText = themeToggle.querySelector('span');
+        var currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'dark') {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+            themeText.textContent = 'Light';
+        }
+        themeToggle.addEventListener('click', function() {
+            var theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = 'Light';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeText.textContent = 'Dark';
+            }
+        });
+
+        document.querySelectorAll('.complaint-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.complaint-tab').forEach(function(t) { t.classList.remove('active'); });
+                this.classList.add('active');
+                var target = this.dataset.tab;
+                document.getElementById('panel-submit').classList.add('hidden');
+                document.getElementById('panel-track').classList.remove('active');
+                document.getElementById('panel-track').style.display = 'none';
+                document.getElementById('panel-verify').classList.remove('active');
+                document.getElementById('panel-verify').style.display = 'none';
+                if (target === 'submit') {
+                    document.getElementById('panel-submit').classList.remove('hidden');
+                } else if (target === 'track') {
+                    document.getElementById('panel-track').style.display = 'block';
+                    document.getElementById('panel-track').classList.add('active');
+                } else if (target === 'verify') {
+                    document.getElementById('panel-verify').style.display = 'block';
+                    document.getElementById('panel-verify').classList.add('active');
+                }
+            });
+        });
+
+        var form = document.getElementById('complaint-form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var submitBtn = this.querySelector('.submit-btn');
+                var originalHTML = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&nbsp; Submitting...';
+                submitBtn.disabled = true;
+                setTimeout(function() {
+                    var refId = 'IND-2026-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+                    alert('Complaint submitted successfully!\n\nReference ID: ' + refId + '\n\nYou can track your complaint using this ID in the Track tab.');
+                    form.reset();
+                    submitBtn.innerHTML = originalHTML;
+                    submitBtn.disabled = false;
+                }, 1200);
+            });
+        }
+
+        var searchInput = document.querySelector('.search-box input');
+        var searchBtn = document.querySelector('.search-box button');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function() {
+                var query = searchInput.value.trim();
+                if (query) {
+                    alert('Searching for: "' + query + '"\n\n(In production, this would search all services and schemes.)');
+                }
+            });
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') searchBtn.click();
+                });
+            }
+        }
+
+        var headerObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    headerObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('.section-header').forEach(function(el) {
+            headerObserver.observe(el);
+        });
+
+        var statObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    var items = entry.target.querySelectorAll('.stat-item');
+                    items.forEach(function(item, i) {
+                        requestAnimationFrame(function() {
+                            setTimeout(function() {
+                                item.classList.add('visible');
+                            }, i * 100);
+                        });
+                    });
+                    statObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.25, rootMargin: '0px 0px -50px 0px' });
+        var statsBanner = document.querySelector('.stats-banner');
+        if (statsBanner) statObserver.observe(statsBanner);
+
+        var cardObserverOptions = { threshold: 0.06, rootMargin: '0px 0px -30px 0px' };
+        var cardObserver = new IntersectionObserver(function(entries) {
+            var sectionMap = {};
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    var section = entry.target.closest('.section, .stats-banner, .hero');
+                    var key = section ? section.id || 'default' : 'default';
+                    if (!sectionMap[key]) sectionMap[key] = [];
+                    sectionMap[key].push(entry.target);
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+            Object.keys(sectionMap).forEach(function(key) {
+                sectionMap[key].forEach(function(el, i) {
+                    var delayClass = 'delay-' + Math.min(i + 1, 8);
+                    el.classList.add(delayClass);
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            el.classList.add('visible');
+                        });
+                    });
+                });
+            });
+        }, cardObserverOptions);
+
+        document.querySelectorAll('.animate-in').forEach(function(el) {
+            cardObserver.observe(el);
+        });
+
+        var hero = document.querySelector('.hero');
+        if (hero) {
+            var parallaxActive = true;
+            window.addEventListener('scroll', function() {
+                if (!parallaxActive) return;
+                var rect = hero.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                    var scrolled = window.scrollY;
+                    var rate = scrolled * 0.2;
+                    hero.style.setProperty('--parallax-y', rate + 'px');
+                    hero.style.setProperty('--parallax-opacity', (1 - scrolled / window.innerHeight * 0.5).toFixed(2));
+                }
+            }, { passive: true });
+        }
+
+        var navLinks = document.querySelectorAll('.nav-menu a');
+        var sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', function() {
+            var scrollY = window.scrollY + 120;
+            sections.forEach(function(sec) {
+                var top = sec.offsetTop;
+                var height = sec.offsetHeight;
+                var id = sec.getAttribute('id');
+                if (scrollY >= top && scrollY < top + height) {
+                    navLinks.forEach(function(link) {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { passive: true });
+
+        document.querySelectorAll('.tile').forEach(function(tile) {
+            tile.addEventListener('click', function() {
+                var text = this.querySelector('h4').textContent;
+                if (text === 'File Complaint') {
+                    document.getElementById('complaints').scrollIntoView({ behavior: 'smooth' });
+                } else if (text === 'Track Status') {
+                    document.getElementById('complaints').scrollIntoView({ behavior: 'smooth' });
+                    setTimeout(function() {
+                        document.querySelector('[data-tab="track"]').click();
+                    }, 500);
+                }
+            });
+        });
+
+        document.querySelectorAll('.service-card').forEach(function(card) {
+            card.addEventListener('click', function() {
+                var title = this.querySelector('h3').textContent;
+                console.log('Opening ' + title + ' portal...');
+            });
+        });
+    </script>
+
+    
+    <script>
+    (function () {
+        var splash   = document.getElementById('ic-splash');
+        var bar      = document.getElementById('ic-splash-bar');
+        if (!splash || !bar) return;
+
+        var START    = Date.now();
+        var MIN_MS   = 2800;
+        var dismissed = false;
+
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(function () { bar.style.width = '100%'; }, 280);
+
+        function hideSplash() {
+            if (dismissed) return;
+            dismissed = true;
+            splash.classList.add('ic-splash-out');
+            document.body.style.overflow = '';
+            splash.addEventListener('transitionend', function () {
+                splash.remove();
+            }, { once: true });
+        }
+
+        var hardTimer = setTimeout(hideSplash, 5000);
+
+        window.addEventListener('load', function () {
+            var elapsed   = Date.now() - START;
+            var remaining = Math.max(0, MIN_MS - elapsed);
+            clearTimeout(hardTimer);
+            setTimeout(function () {
+                clearTimeout(hardTimer);
+                hideSplash();
+            }, remaining + 450);
+        });
+    })();
+    </script>
+
+
+<div id="chatbotWidget" class="chatbot-widget">
+    <button class="chatbot-toggle" onclick="toggleChatbot()" id="chatbotToggle">
+        <i class="fas fa-comments"></i>
+        <span class="chatbot-badge" id="chatbotBadge">1</span>
+    </button>
+    
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="chatbot-header-left">
+                <div class="chatbot-avatar">🤖</div>
+                <div>
+                    <div class="chatbot-title">India Innovates Assistant</div>
+                    <div class="chatbot-status">
+                        <span class="status-dot"></span> Online
+                    </div>
+                </div>
+            </div>
+            <button class="chatbot-close" onclick="toggleChatbot()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chatbot-message bot-message">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="message-text">
+                        Namaste! 🙏 I'm your India Innovates Assistant. I can help you with:
+                        <div class="quick-options">
+                            <button onclick="askQuestion('What is India Innovates?')">ℹ️ About Platform</button>
+                            <button onclick="askQuestion('How to get started?')">🚀 Get Started</button>
+                            <button onclick="askQuestion('File a complaint')">📝 File Complaint</button>
+                            <button onclick="askQuestion('Government schemes')">🏛️ Schemes Info</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chatbot-input-area">
+            <input 
+                type="text" 
+                class="chatbot-input" 
+                id="chatbotInput" 
+                placeholder="Type your question..."
+                onkeypress="if(event.key==='Enter') sendChatMessage()"
+            >
+            <button class="chatbot-send" onclick="sendChatMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.chatbot-widget{position:fixed;bottom:24px;right:24px;z-index:9999;font-family:'Inter',-apple-system,sans-serif}
+.chatbot-toggle{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border:none;color:white;font-size:28px;cursor:pointer;box-shadow:0 8px 24px rgba(102,126,234,0.4);transition:transform .2s,box-shadow .2s;position:relative}
+.chatbot-toggle:hover{transform:scale(1.1);box-shadow:0 12px 32px rgba(102,126,234,0.5)}
+.chatbot-toggle:active{transform:scale(0.95)}
+.chatbot-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:white;width:24px;height:24px;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid white}
+.chatbot-window{position:absolute;bottom:80px;right:0;width:380px;max-width:calc(100vw - 48px);height:600px;max-height:calc(100vh - 130px);background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.2);display:none;flex-direction:column;overflow:hidden}
+.chatbot-window.active{display:flex;animation:slideUp .3s ease-out}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.chatbot-header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.chatbot-header-left{display:flex;align-items:center;gap:12px}
+.chatbot-avatar{width:40px;height:40px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.chatbot-title{font-size:16px;font-weight:700}
+.chatbot-status{font-size:12px;opacity:0.9;display:flex;align-items:center;gap:6px}
+.status-dot{width:8px;height:8px;background:#10b981;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.chatbot-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.2);border:none;color:white;cursor:pointer;font-size:16px;transition:background .2s}
+.chatbot-close:hover{background:rgba(255,255,255,0.3)}
+.chatbot-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;background:#f8fafc}
+.chatbot-message{display:flex;gap:12px;animation:fadeIn .3s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.user-message{flex-direction:row-reverse}
+.message-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.user-message .message-avatar{background:linear-gradient(135deg,#f59e0b 0%,#f97316 100%)}
+.message-content{max-width:75%}
+.message-text{background:white;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.5;color:#1e293b;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.user-message .message-text{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white}
+.message-time{font-size:11px;color:#94a3b8;margin-top:4px;padding:0 4px}
+.quick-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.quick-options button{padding:8px 12px;border:1px solid #e2e8f0;background:white;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s;text-align:left}
+.quick-options button:hover{background:#f1f5f9;border-color:#667eea;color:#667eea;transform:translateY(-1px)}
+.chatbot-input-area{padding:16px;background:white;border-top:1px solid #e2e8f0;display:flex;gap:12px}
+.chatbot-input{flex:1;padding:12px 16px;border:2px solid #e2e8f0;border-radius:24px;font-size:14px;font-family:inherit;transition:all .2s}
+.chatbot-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,0.1)}
+.chatbot-send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border:none;color:white;font-size:16px;cursor:pointer;transition:all .2s}
+.chatbot-send:hover{transform:scale(1.1);box-shadow:0 4px 12px rgba(102,126,234,0.4)}
+.chatbot-send:active{transform:scale(0.95)}
+.typing-indicator{display:flex;gap:4px;padding:12px 16px}
+.typing-dot{width:8px;height:8px;background:#94a3b8;border-radius:50%;animation:typing 1.4s infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typing{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-10px)}}
+@media (max-width:640px){.chatbot-window{width:calc(100vw - 32px);height:calc(100vh - 100px);bottom:80px}}
+</style>
+
+<script>
+function toggleChatbot(){const w=document.getElementById('chatbotWindow'),b=document.getElementById('chatbotBadge');w.classList.toggle('active');if(w.classList.contains('active')){b.style.display='none';document.getElementById('chatbotInput').focus()}}
+function sendChatMessage(){const i=document.getElementById('chatbotInput'),m=i.value.trim();if(!m)return;addChatMessage(m,'user');i.value='';showTypingIndicator();setTimeout(()=>{hideTypingIndicator();const r=getBotResponse(m);addChatMessage(r,'bot')},1000+Math.random()*1000)}
+function askQuestion(q){document.getElementById('chatbotInput').value=q;sendChatMessage()}
+function addChatMessage(t,type){const c=document.getElementById('chatbotMessages'),time=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),d=document.createElement('div');d.className=`chatbot-message ${type}-message`;const a=type==='user'?'👤':'🤖';d.innerHTML=`<div class="message-avatar">${a}</div><div class="message-content"><div class="message-text">${t}</div><div class="message-time">${time}</div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight}
+function showTypingIndicator(){const c=document.getElementById('chatbotMessages'),t=document.createElement('div');t.id='typingIndicator';t.className='chatbot-message bot-message';t.innerHTML='<div class="message-avatar">🤖</div><div class="message-content"><div class="message-text typing-indicator"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div></div>';c.appendChild(t);c.scrollTop=c.scrollHeight}
+function hideTypingIndicator(){const t=document.getElementById('typingIndicator');if(t)t.remove()}
+function getBotResponse(m){m=m.toLowerCase();if(m.includes('what is')||m.includes('about'))return`<strong>India Innovates</strong> is a revolutionary civic engagement platform! 🇮🇳<br><br>✅ Report civic issues instantly<br>✅ AI-powered verification<br>✅ Track complaint status in real-time<br>✅ Access personalized government schemes<br>✅ Earn points for civic participation<br><br>Join 50,000+ active citizens making India better! 🚀`;if(m.includes('start')||m.includes('signup')||m.includes('register'))return`Getting started is easy! 🎯<br><br>1️⃣ Click on "Get Started" above<br>2️⃣ Create your account (name, email, phone)<br>3️⃣ Verify your mobile number<br>4️⃣ Complete your profile<br>5️⃣ Start reporting issues!<br><br>No paperwork, no waiting - instant activation! ⚡`;if(m.includes('complaint')||m.includes('file')||m.includes('report'))return`Filing a complaint is super simple:<br><br>1️⃣ Sign in to your account<br>2️⃣ Click "Report Issue"<br>3️⃣ Select category (Road, Drainage, etc.)<br>4️⃣ Add location & photo<br>5️⃣ Submit! Our AI verifies instantly ✅<br><br>Your complaint reaches authorities in <strong>seconds</strong>!`;if(m.includes('scheme')||m.includes('yojana'))return`We offer personalized government schemes! 🎁<br><br>After you sign up, we match schemes based on:<br>👨‍🎓 Your occupation (student/farmer/worker)<br>📅 Age group<br>💰 Income level<br>🎓 Education qualification<br><br>Eligible schemes appear automatically in your dashboard!`;if(m.includes('ai')||m.includes('technology'))return`Our AI technology ensures quality! 🤖<br><br>✅ Image Analysis: Detects real civic issues<br>✅ Location Verification: GPS validation<br>✅ Duplicate Prevention: Smart filtering<br>✅ Priority Scoring: Urgent issues first<br><br>99.2% accuracy in complaint verification! 📊`;if(m.includes('help')||m.includes('support'))return`Need help? We're here! 😊<br><br>📞 Helpline: 1800-111-555 (24/7 Toll Free)<br>📧 Email: support@indiainnovates.gov.in<br>💬 Live Chat: Available 9 AM - 9 PM IST<br><br>Average response time: <strong>5 minutes</strong> ⚡`;return`Thanks for reaching out! 🙏<br><br>I can help you with:<br>• Platform information<br>• How to get started<br>• Filing complaints<br>• Government schemes<br> • AI technology<br><br>Try asking a specific question or click the quick options above!`}
+</script>
+
+</body>
+</html>

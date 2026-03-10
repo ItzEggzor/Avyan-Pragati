@@ -1,0 +1,575 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Avyan Pragati</title>
+    <link rel="icon" type="image/png" href="avyanpragati.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main website.css">
+    <style>
+        .profile-container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 40px;
+            background: var(--bg-alt);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--saffron), var(--india-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 48px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .profile-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 15px 0 5px;
+        }
+
+        .profile-header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .profile-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .profile-section {
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            background: var(--surface);
+        }
+
+        .profile-section h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-section h2 i {
+            color: var(--accent);
+            font-size: 20px;
+        }
+
+        .profile-field {
+            margin-bottom: 18px;
+        }
+
+        .profile-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .profile-field value {
+            display: block;
+            font-size: 15px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .edit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.25s var(--ease-out);
+            margin-top: 15px;
+        }
+
+        .edit-btn:hover {
+            background: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 30px;
+            transition: all 0.25s var(--ease-out);
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+            gap: 12px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1.5px solid var(--border);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        [data-theme="dark"] .profile-container {
+            background: var(--bg-alt);
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                margin: 30px 20px;
+                padding: 25px 20px;
+            }
+
+            .profile-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="tricolor-bar"></div>
+
+    
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    
+    <header id="header">
+        <div class="header-top">
+            <div class="header-top-left">
+                <span><i class="fas fa-phone-alt"></i> 1800-111-555 (Toll Free)</span>
+                <span><i class="fas fa-envelope"></i> support@avyanpragati.gov.in</span>
+            </div>
+            <div class="header-top-right">
+                <button class="lang-btn">Hindi</button>
+                <button class="lang-btn">English</button>
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark</span>
+                </button>
+            </div>
+        </div>
+        <nav class="navbar">
+            <a href="Main website.html" class="logo">
+                <div class="logo-icon">
+                    <img src="avyanpragati.png" alt="Avyan Pragati" style="height:36px;width:36px;object-fit:contain;border-radius:6px;">
+                </div>
+                <div class="logo-text">
+                    <span class="brand">Avyan Pragati</span>
+                    <span class="tagline">Digital Governance Portal</span>
+                </div>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="Main website.html#services">Services</a></li>
+                <li><a href="Main website.html#quick">Quick Access</a></li>
+                <li><a href="Main website.html#complaints">Complaints</a></li>
+                <li><a href="Main website.html#feed">My Feed</a></li>
+                <li><a href="Main website.html#engage">Engage</a></li>
+                <li><a href="Main website.html#news">Updates</a></li>
+            </ul>
+            <div class="search-box">
+                <input type="text" placeholder="Search services...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="nav-auth">
+                <button id="logout-btn" class="btn-login" style="background: #DC2626; border-color: #DC2626;" onclick="logoutUser()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    
+    <div class="profile-container">
+        <a href="Main website.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1 id="profile-name">Loading...</h1>
+            <p id="profile-citizen-id" style="display: none;">Citizen ID: <span></span></p>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;"><i class="fas fa-lock-open"></i> Read-only Profile (Changes made during registration)</p>
+        </div>
+
+        <div class="profile-sections">
+            
+            <div class="profile-section">
+                <h2><i class="fas fa-user-shield"></i> Personal Information</h2>
+                <div class="profile-field">
+                    <label>Full Name</label>
+                    <value id="field-fullName">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Date of Birth</label>
+                    <value id="field-dob">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Gender</label>
+                    <value id="field-gender">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Nationality</label>
+                    <value id="field-nationality">-</value>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 15px;"><i class="fas fa-info-circle"></i> Information from Aadhaar/DigiLocker cannot be changed</p>
+            </div>
+
+            
+            <div class="profile-section">
+                <h2><i class="fas fa-address-book"></i> Contact Information</h2>
+                <div class="profile-field">
+                    <label>Email Address</label>
+                    <value id="field-email">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Mobile Number</label>
+                    <value id="field-mobile">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>State</label>
+                    <value id="field-state">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>District</label>
+                    <value id="field-district">-</value>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 15px;"><i class="fas fa-info-circle"></i> Contact details verified during registration</p>
+            </div>
+
+            
+            <div class="profile-section">
+                <h2><i class="fas fa-map-marker-alt"></i> Address Details</h2>
+                <div class="profile-field">
+                    <label>House No./Building</label>
+                    <value id="field-houseNumber">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Street/Road Name</label>
+                    <value id="field-street">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Village/City</label>
+                    <value id="field-city">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Postal Code</label>
+                    <value id="field-pincode">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Landmark (Optional)</label>
+                    <value id="field-landmark">-</value>
+                </div>
+            </div>
+
+            
+            <div class="profile-section">
+                <h2><i class="fas fa-briefcase"></i> Employment & Profession</h2>
+                <div class="profile-field">
+                    <label>Employment Status</label>
+                    <value id="field-employmentStatus">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Profession/Occupation</label>
+                    <value id="field-profession">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Industry Sector</label>
+                    <value id="field-industry">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Years of Experience</label>
+                    <value id="field-experience">-</value>
+                </div>
+                <div class="profile-field">
+                    <label>Annual Income Range</label>
+                    <value id="field-incomeRange">-</value>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="profile-stats">
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Services Used</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Active Complaints</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Resolved Complaints</div>
+            </div>
+        </div>
+    </div>
+
+    
+    <footer id="contact" style="margin-top: 60px;">
+        <div class="footer-content">
+            <div class="footer-section footer-brand">
+                <div class="logo-text">
+                    <span class="brand"><img src="avyanpragati.png" alt="Avyan Pragati" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;border-radius:3px;">&nbsp; Avyan Pragati</span>
+                    <span class="tagline">Digital Governance Portal</span>
+                </div>
+                <p>Avyan Pragati is the unified digital platform of the Government of India, providing seamless access to public services, grievance redressal, and citizen participation.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Services</h4>
+                <ul>
+                    <li><a href="#">Document Services</a></li>
+                    <li><a href="#">Healthcare</a></li>
+                    <li><a href="#">Education Support</a></li>
+                    <li><a href="#">Employment Help</a></li>
+                    <li><a href="#">Housing Schemes</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">MyGov.in</a></li>
+                    <li><a href="#">india.gov.in</a></li>
+                    <li><a href="#">Digital India</a></li>
+                    <li><a href="#">RTI Online</a></li>
+                    <li><a href="#">Data.gov.in</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Report Issues</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Avyan Pragati - Government of India. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Accessibility</a>
+                <a href="#">Sitemap</a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { auth, db, signOut, onAuthStateChanged, getDoc, doc } from './firebase-config.js';
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                alert('Please log in first to view your profile.');
+                window.location.href = 'sign-up.html';
+                return;
+            }
+
+            getDoc(doc(db, 'users', user.uid))
+                .then((docSnap) => {
+                    if (docSnap.exists()) {
+                        loadUserData(docSnap.data());
+                    } else {
+                        alert('No profile data found. Please complete the sign-up process.');
+                        window.location.href = 'sign-up.html';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching user data:', error);
+                    alert('Error loading profile. Please try again.');
+                });
+        });
+
+        function loadUserData(userData) {
+            const dobDate = new Date(userData.dob);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDob = dobDate.toLocaleDateString('en-IN', options);
+
+            const formattedMobile = userData.mobile ? '+91 ' + userData.mobile.slice(0, 5) + ' ' + userData.mobile.slice(5) : '-';
+
+            const address = userData.address || {};
+            const employment = userData.employment || {};
+
+            const dataMap = {
+                'profile-name': userData.fullName || 'User',
+                'field-fullName': userData.fullName || '-',
+                'field-dob': formattedDob || '-',
+                'field-gender': userData.gender || '-',
+                'field-nationality': userData.nationality || '-',
+                'field-email': userData.email || '-',
+                'field-mobile': formattedMobile || '-',
+                'field-state': address.state || '-',
+                'field-district': address.district || '-',
+                'field-houseNumber': address.houseNumber || '-',
+                'field-street': address.street || '-',
+                'field-city': address.city || '-',
+                'field-pincode': address.pincode || '-',
+                'field-landmark': address.landmark || '-',
+                'field-employmentStatus': employment.status || '-',
+                'field-profession': employment.profession || '-',
+                'field-industry': employment.industry || '-',
+                'field-experience': employment.experience ? employment.experience + ' years' : '-',
+                'field-incomeRange': employment.incomeRange || '-'
+            };
+
+            for (const [id, value] of Object.entries(dataMap)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                }
+            }
+
+            const citizenId = 'IN-' + new Date().getFullYear() + '-' + userData.uid.substr(0, 6).toUpperCase();
+            const citizenIdElement = document.getElementById('profile-citizen-id');
+            if (citizenIdElement) {
+                citizenIdElement.style.display = 'block';
+                citizenIdElement.querySelector('span').textContent = citizenId;
+            }
+        }
+
+        window.logoutUser = function() {
+            if (confirm('Are you sure you want to logout?')) {
+                signOut(auth)
+                    .then(() => {
+                        localStorage.removeItem('currentUser');
+                        alert('You have been logged out successfully.');
+                        window.location.href = 'Main website.html';
+                    })
+                    .catch((error) => {
+                        console.error('Logout error:', error);
+                        alert('Error logging out. Please try again.');
+                    });
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            var themeToggle = document.getElementById('theme-toggle');
+            var themeIcon = themeToggle.querySelector('i');
+            var themeText = themeToggle.querySelector('span');
+            var currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = 'Light';
+            }
+            themeToggle.addEventListener('click', function() {
+                var theme = document.documentElement.getAttribute('data-theme');
+                if (theme === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    themeText.textContent = 'Light';
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    themeText.textContent = 'Dark';
+                }
+            });
+
+            window.addEventListener('scroll', function() {
+                var scrollProgress = document.getElementById('scroll-progress');
+                var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                var scrolled = (window.scrollY / scrollHeight) * 100;
+                scrollProgress.style.width = scrolled + '%';
+                var header = document.getElementById('header');
+                if (window.scrollY > 10) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    var href = this.getAttribute('href');
+                    if (href !== '#') {
+                        e.preventDefault();
+                        var target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

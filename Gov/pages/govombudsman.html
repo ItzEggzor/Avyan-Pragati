@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ombudsman Desk – Contractor Grievance Portal</title>
+    <link rel="stylesheet" href="/Gov/assets/css/base.css?v=202603081545">
+    <link rel="stylesheet" href="/Gov/assets/css/professional-theme.css?v=202603081545">
+    <link rel="stylesheet" href="/Gov/assets/css/ombudsman.css?v=202603081545">
+    <script>
+        if (!localStorage.getItem('officerInfo')) {
+            window.location.href = '/gov/login';
+        }
+    </script>
+</head>
+<body>
+
+
+
+
+<div class="ob-topbar">
+    <a class="ob-back-btn"
+       href="#"
+       onclick="if(window.parent && window.parent.loadHome){window.parent.loadHome();}else{window.location.href='/gov/dashboard';} return false;">
+       ← Dashboard
+    </a>
+    <span class="ob-topbar-title">Bharatmandapam Project Management Portal</span>
+    <button class="ob-theme-btn" onclick="toggleOBTheme()">🌓 Theme</button>
+</div>
+
+
+
+
+<div class="ob-header">
+    <div class="ob-header-left">
+        <span class="ob-header-icon">👨‍⚖️</span>
+        <div>
+            <div class="ob-header-title">Ombudsman Desk</div>
+            <div class="ob-header-sub">Contractor Grievance Management System &mdash; Central Infrastructure Projects</div>
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+<div class="ob-stat-strip">
+    <div class="ob-stat-tile ob-st-total">
+        <span class="ob-st-num" id="obStatTotal">12</span>
+        <span class="ob-st-label">Total Grievances</span>
+    </div>
+    <div class="ob-stat-tile ob-st-open">
+        <span class="ob-st-num" id="obStatOpen">3</span>
+        <span class="ob-st-label">Open</span>
+    </div>
+    <div class="ob-stat-tile ob-st-review">
+        <span class="ob-st-num" id="obStatReview">4</span>
+        <span class="ob-st-label">Under Review</span>
+    </div>
+    <div class="ob-stat-tile ob-st-escalated">
+        <span class="ob-st-num" id="obStatEscalated">1</span>
+        <span class="ob-st-label">Escalated</span>
+    </div>
+    <div class="ob-stat-tile ob-st-resolved">
+        <span class="ob-st-num" id="obStatResolved">4</span>
+        <span class="ob-st-label">Resolved / Closed</span>
+    </div>
+</div>
+
+
+
+
+<div class="ob-wrapper">
+
+    
+    <div class="ob-left-panel">
+
+        
+        <div class="ob-search-row">
+            <input id="obSearch" type="text" class="ob-search" placeholder="🔍  Search by ID, title, or contractor…" oninput="applyFilters()">
+            <button class="ob-reset-btn" onclick="obResetFilters()" title="Reset all filters">↺</button>
+        </div>
+
+        
+        <div class="ob-filter-group">
+            <div class="ob-filter-label">Status</div>
+            <div class="ob-pills">
+                <button class="s-pill active" data-s="all"          onclick="setStatusPill(this,'all')">All</button>
+                <button class="s-pill"        data-s="open"          onclick="setStatusPill(this,'open')">Open</button>
+                <button class="s-pill"        data-s="under_review"  onclick="setStatusPill(this,'under_review')">Under Review</button>
+                <button class="s-pill"        data-s="escalated"     onclick="setStatusPill(this,'escalated')">Escalated</button>
+                <button class="s-pill"        data-s="resolved"      onclick="setStatusPill(this,'resolved')">Resolved</button>
+                <button class="s-pill"        data-s="closed"        onclick="setStatusPill(this,'closed')">Closed</button>
+            </div>
+        </div>
+
+        
+        <div class="ob-filter-group">
+            <div class="ob-filter-label">Priority</div>
+            <div class="ob-pills">
+                <button class="pr-pill active" data-p="all"      onclick="setPrioPill(this,'all')">All</button>
+                <button class="pr-pill"        data-p="critical" onclick="setPrioPill(this,'critical')">Critical</button>
+                <button class="pr-pill"        data-p="high"     onclick="setPrioPill(this,'high')">High</button>
+                <button class="pr-pill"        data-p="medium"   onclick="setPrioPill(this,'medium')">Medium</button>
+                <button class="pr-pill"        data-p="low"      onclick="setPrioPill(this,'low')">Low</button>
+            </div>
+        </div>
+
+        
+        <div class="ob-filter-group ob-select-row">
+            <select id="obCatFilter" class="ob-select" onchange="applyFilters()">
+                <option value="">All Categories</option>
+                <option>Payment Delay</option>
+                <option>Permission / Land Issue</option>
+                <option>Material Shortage</option>
+                <option>Labour / Welfare</option>
+                <option>Scope / Contract Dispute</option>
+                <option>Bureaucratic Delay</option>
+                <option>Force Majeure / Natural Disaster</option>
+                <option>Design Change / Rework</option>
+                <option>On-Site Interference</option>
+                <option>Utility Relocation Delay</option>
+                <option>Insurance / Legal</option>
+            </select>
+            <select id="obStateFilter" class="ob-select" onchange="applyFilters()">
+                <option value="">All States</option>
+            </select>
+        </div>
+
+        
+        <div class="ob-list-header">
+            Grievances:&nbsp;<span id="obCount" class="ob-count-badge">…</span>
+        </div>
+        <div id="obListContainer" class="ob-list-container">
+            
+        </div>
+    </div>
+
+    
+    <div class="ob-right-panel">
+
+        
+        <div class="ob-map-box">
+            <div class="ob-map-toolbar">
+                <span class="ob-map-title">📍 Grievance Map &mdash; National Overview</span>
+                <div class="ob-map-legend">
+                    <span class="leg-dot" style="background:var(--open)"></span> Open &nbsp;
+                    <span class="leg-dot" style="background:var(--review)"></span> Under Review &nbsp;
+                    <span class="leg-dot" style="background:var(--escalated)"></span> Escalated &nbsp;
+                    <span class="leg-dot" style="background:var(--resolved)"></span> Resolved
+                </div>
+                <select class="ob-maptype-sel" onchange="obChangeMapType(this.value)">
+                    <option value="roadmap">Road Map</option>
+                    <option value="satellite">Satellite</option>
+                    <option value="terrain">Terrain</option>
+                </select>
+            </div>
+            <div id="grievanceMap"></div>
+        </div>
+
+        
+        <div class="ob-detail-panel">
+            <div id="obPlaceholder" class="ob-placeholder">
+                <div class="ph-icon">👨‍⚖️</div>
+                <div class="ph-text">Select a grievance from the list<br>or click a map marker to view details.</div>
+            </div>
+            <div id="obGrvDetail" class="ob-grv-detail" style="display:none;">
+                
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<div id="obNewModal" class="ob-modal-overlay" style="display:none;">
+    <div class="ob-new-box">
+        <div class="ob-modal-head">
+            <span>📝 File New Grievance</span>
+            <button class="ob-modal-close" onclick="closeNewModal()">✕</button>
+        </div>
+        <form id="ngForm" onsubmit="return false;">
+            <div class="ob-form-grid">
+                <div class="ob-form-item ob-form-full">
+                    <label>Grievance Title <span class="req">*</span></label>
+                    <input id="ngTitle" type="text" placeholder="Brief description of the problem" required>
+                </div>
+                <div class="ob-form-item">
+                    <label>Contractor / Company Name <span class="req">*</span></label>
+                    <input id="ngContractor" type="text" placeholder="e.g. Larsen & Toubro Ltd." required>
+                </div>
+                <div class="ob-form-item">
+                    <label>Category <span class="req">*</span></label>
+                    <select id="ngCategory" required>
+                        <option value="">Select category…</option>
+                        <option>Payment Delay</option>
+                        <option>Permission / Land Issue</option>
+                        <option>Material Shortage</option>
+                        <option>Labour / Welfare</option>
+                        <option>Scope / Contract Dispute</option>
+                        <option>Bureaucratic Delay</option>
+                        <option>Force Majeure / Natural Disaster</option>
+                        <option>Design Change / Rework</option>
+                        <option>On-Site Interference</option>
+                        <option>Utility Relocation Delay</option>
+                        <option>Insurance / Legal</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="ob-form-item">
+                    <label>State / UT <span class="req">*</span></label>
+                    <select id="ngState" required>
+                        <option value="">Select state…</option>
+                        <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+                        <option>Chhattisgarh</option><option>Delhi</option><option>Goa</option>
+                        <option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option>
+                        <option>Jharkhand</option><option>Karnataka</option><option>Kerala</option>
+                        <option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option>
+                        <option>Meghalaya</option><option>Odisha</option><option>Punjab</option>
+                        <option>Rajasthan</option><option>Tamil Nadu</option><option>Telangana</option>
+                        <option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option>
+                        <option>Chandigarh</option><option>Jammu & Kashmir</option><option>Ladakh</option>
+                    </select>
+                </div>
+                <div class="ob-form-item">
+                    <label>Priority Level <span class="req">*</span></label>
+                    <select id="ngPriority" required>
+                        <option value="medium" selected>Medium</option>
+                        <option value="low">Low</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                <div class="ob-form-item ob-form-full">
+                    <label>Detailed Description <span class="req">*</span></label>
+                    <textarea id="ngDesc" rows="4" placeholder="Describe the problem in detail. Include dates, amounts, or any official correspondence references." required></textarea>
+                </div>
+            </div>
+            <div class="ob-modal-footer">
+                <button class="ob-cancel-btn" type="button" onclick="closeNewModal()">Cancel</button>
+                <button class="ob-submit-btn" type="button" onclick="submitNewGrievance()">File Grievance</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+<div id="obToast" class="ob-toast"></div>
+
+
+
+
+<script src="/Gov/assets/js/utils.js?v=202603100900"></script>
+<script src="/Gov/assets/js/ombudsman.js?v=202603081545"></script>
+<script>
+    (function() {
+        var s = document.createElement('script');
+        s.src = 'https://maps.googleapis.com/maps/api/js'
+              + '?key=YOUR_GOOGLE_MAPS_API_KEY'
+              + '&region=IN'
+              + '&language=en'
+              + '&callback=initGrievanceMap';
+        s.async = true;
+        document.head.appendChild(s);
+    })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+{
+  "hosting": {
+    "public": ".",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/*.bat",
+      "**/*.py",
+      "**/*.sh",
+      "**/backend/**",
+      "**/functions/**",
+      "**/ai-service/**",
+      "**/chatbot-service/**",
+      "**/db/**",
+      "**/*.md",
+      "requirements.txt",
+      "docker-compose.yml",
+      ".env*"
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, must-revalidate"
+          },
+          {
+            "key": "Pragma",
+            "value": "no-cache"
+          },
+          {
+            "key": "Expires",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "source": "/Gov/assets/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/setup-demo",
+        "destination": "/setup-demo-data.html"
+      },
+      {
+        "source": "/demo-setup",
+        "destination": "/setup-demo-data.html"
+      },
+      {
+        "source": "/initialize-demo",
+        "destination": "/setup-demo-data.html"
+      },
+      {
+        "source": "/home",
+        "destination": "/Main website.html"
+      },
+      {
+        "source": "/main",
+        "destination": "/Main website.html"
+      },
+      {
+        "source": "/logged-main",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/dashboard",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/login",
+        "destination": "/login.html"
+      },
+      {
+        "source": "/signup",
+        "destination": "/sign-up.html"
+      },
+      {
+        "source": "/register",
+        "destination": "/sign-up.html"
+      },
+      {
+        "source": "/profile",
+        "destination": "/profile.html"
+      },
+      {
+        "source": "/chatbot",
+        "destination": "/chatbot-component.html"
+      },
+      {
+        "source": "/contractor",
+        "destination": "/contractor.html"
+      },
+      {
+        "source": "/contractor/dashboard",
+        "destination": "/contractor.html"
+      },
+      {
+        "source": "/contractor/login",
+        "destination": "/contractor-login.html"
+      },
+      {
+        "source": "/contractor/signup",
+        "destination": "/contractor-signup.html"
+      },
+      {
+        "source": "/contractor/register",
+        "destination": "/contractor-signup.html"
+      },
+      {
+        "source": "/gov",
+        "destination": "/Gov/pages/govlogin.html"
+      },
+      {
+        "source": "/gov/login",
+        "destination": "/Gov/pages/govlogin.html"
+      },
+      {
+        "source": "/gov/dashboard",
+        "destination": "/Gov/pages/govdashboard.html"
+      },
+      {
+        "source": "/gov/digital-twin",
+        "destination": "/Gov/pages/govdigital-twin.html"
+      },
+      {
+        "source": "/gov/map",
+        "destination": "/Gov/pages/govdigital-twin.html"
+      },
+      {
+        "source": "/gov/ombudsman",
+        "destination": "/Gov/pages/govombudsman.html"
+      },
+      {
+        "source": "/gov/audit",
+        "destination": "/Gov/pages/govombudsman.html"
+      },
+      {
+        "source": "/gov/project-lifecycle",
+        "destination": "/Gov/pages/govproject-lifecycle.html"
+      },
+      {
+        "source": "/gov/projects",
+        "destination": "/Gov/pages/govproject-lifecycle.html"
+      },
+      {
+        "source": "/gov/schemes",
+        "destination": "/Gov/pages/govschemes.html"
+      },
+      {
+        "source": "/ai-validation",
+        "destination": "/ai-validation-demo.html"
+      },
+      {
+        "source": "/ai-demo",
+        "destination": "/ai-validation-demo.html"
+      },
+      {
+        "source": "/whatsapp",
+        "destination": "/whatsapp-integration-demo.html"
+      },
+      {
+        "source": "/whatsapp-demo",
+        "destination": "/whatsapp-integration-demo.html"
+      },
+      {
+        "source": "/blockchain",
+        "destination": "/index.html"
+      },
+
+      // ── Citizen: additional clean URLs ────────────────────────────────
+      {
+        "source": "/submit-complaint",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/submit",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/file-complaint",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/my-complaints",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/complaints",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/citizen-dashboard",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/citizen/dashboard",
+        "destination": "/logged main.html"
+      },
+
+      // ── Citizen portal section deep-links ─────────────────────────────
+      {
+        "source": "/services",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/my-region",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/region-news",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/devmap",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/feed",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/leaderboard",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/engage",
+        "destination": "/logged main.html"
+      },
+      {
+        "source": "/citizen/login",
+        "destination": "/login.html"
+      },
+      {
+        "source": "/citizen/signup",
+        "destination": "/sign-up.html"
+      },
+      {
+        "source": "/citizen/register",
+        "destination": "/sign-up.html"
+      },
+      {
+        "source": "/citizen/profile",
+        "destination": "/profile.html"
+      },
+      {
+        "source": "/about",
+        "destination": "/Main website.html"
+      },
+      {
+        "source": "/contact",
+        "destination": "/Main website.html"
+      },
+      {
+        "source": "/home-page",
+        "destination": "/Main website.html"
+      },
+      {
+        "source": "/404",
+        "destination": "/404.html"
+      },
+
+      // ── Contractor: additional clean URLs ─────────────────────────────
+      {
+        "source": "/contractor/jobs",
+        "destination": "/contractor.html"
+      },
+      {
+        "source": "/contractor/my-jobs",
+        "destination": "/contractor.html"
+      },
+      {
+        "source": "/contractor/bids",
+        "destination": "/contractor.html"
+      },
+      {
+        "source": "/contractor/work",
+        "destination": "/contractor.html"
+      },
+      {
+        "source": "/contractor/profile",
+        "destination": "/contractor.html"
+      },
+
+      // ── Gov: additional clean URLs ────────────────────────────────────
+      {
+        "source": "/gov/national-command",
+        "destination": "/Gov/pages/govdashboard.html"
+      },
+      {
+        "source": "/gov/risk",
+        "destination": "/Gov/pages/govdashboard.html"
+      },
+      {
+        "source": "/gov/complaints",
+        "destination": "/Gov/pages/govdigital-twin.html"
+      },
+      {
+        "source": "/gov/heatmap",
+        "destination": "/Gov/pages/govdigital-twin.html"
+      }
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

@@ -1,0 +1,543 @@
+﻿
+
+
+<div id="chatbotWidget" class="chatbot-widget">
+    <button class="chatbot-toggle" onclick="toggleChatbot()" id="chatbotToggle">
+        <i class="fas fa-comments"></i>
+        <span class="chatbot-badge" id="chatbotBadge">1</span>
+    </button>
+    
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="chatbot-header-left">
+                <div class="chatbot-avatar">🤖</div>
+                <div>
+                    <div class="chatbot-title">India Innovates Assistant</div>
+                    <div class="chatbot-status">
+                        <span class="status-dot"></span> Online
+                    </div>
+                </div>
+            </div>
+            <button class="chatbot-close" onclick="toggleChatbot()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chatbot-message bot-message">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="message-text">
+                        Namaste! 🙏 I'm your India Innovates Assistant. I can help you with:
+                        <div class="quick-options">
+                            <button onclick="askQuestion('How do I file a complaint?')">📝 File Complaint</button>
+                            <button onclick="askQuestion('Check complaint status')">🔍 Track Status</button>
+                            <button onclick="askQuestion('Government schemes')">🏛️ Schemes Info</button>
+                            <button onclick="askQuestion('How does the leaderboard work?')">🏆 Leaderboard Guide</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chatbot-input-area">
+            <input 
+                type="text" 
+                class="chatbot-input" 
+                id="chatbotInput" 
+                placeholder="Type your question..."
+                onkeypress="if(event.key==='Enter') sendMessage()"
+            >
+            <button class="chatbot-send" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+
+.chatbot-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.chatbot-toggle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.chatbot-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
+}
+
+.chatbot-toggle:active {
+    transform: scale(0.95);
+}
+
+.chatbot-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+.chatbot-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    max-width: calc(100vw - 48px);
+    height: 600px;
+    max-height: calc(100vh - 130px);
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chatbot-window.active {
+    display: flex;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chatbot-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chatbot-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.chatbot-avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.chatbot-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.chatbot-status {
+    font-size: 12px;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.chatbot-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+.chatbot-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.chatbot-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #f8fafc;
+}
+
+.chatbot-message {
+    display: flex;
+    gap: 12px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-message {
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.user-message .message-avatar {
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+}
+
+.message-content {
+    max-width: 75%;
+}
+
+.message-text {
+    background: white;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1e293b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.user-message .message-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.message-time {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 4px;
+    padding: 0 4px;
+}
+
+.quick-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.quick-options button {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.quick-options button:hover {
+    background: #f1f5f9;
+    border-color: #667eea;
+    color: #667eea;
+    transform: translateY(-1px);
+}
+
+.chatbot-input-area {
+    padding: 16px;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 12px;
+}
+
+.chatbot-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 24px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.chatbot-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.chatbot-send {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chatbot-send:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.chatbot-send:active {
+    transform: scale(0.95);
+}
+
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background: #94a3b8;
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+}
+
+@media (max-width: 640px) {
+    .chatbot-window {
+        width: calc(100vw - 32px);
+        height: calc(100vh - 100px);
+        bottom: 80px;
+    }
+}
+</style>
+
+<script>
+function toggleChatbot() {
+    const window = document.getElementById('chatbotWindow');
+    const badge = document.getElementById('chatbotBadge');
+    
+    window.classList.toggle('active');
+    
+    if (window.classList.contains('active')) {
+        badge.style.display = 'none';
+        document.getElementById('chatbotInput').focus();
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById('chatbotInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    addMessage(message, 'user');
+    input.value = '';
+    
+    showTypingIndicator();
+    
+    setTimeout(() => {
+        hideTypingIndicator();
+        const response = getBotResponse(message);
+        addMessage(response, 'bot');
+    }, 1000 + Math.random() * 1000);
+}
+
+function askQuestion(question) {
+    document.getElementById('chatbotInput').value = question;
+    sendMessage();
+}
+
+function addMessage(text, type) {
+    const messagesContainer = document.getElementById('chatbotMessages');
+    const time = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chatbot-message ${type}-message`;
+    
+    const avatar = type === 'user' ? '👤' : '🤖';
+    
+    messageDiv.innerHTML = `
+        <div class="message-avatar">${avatar}</div>
+        <div class="message-content">
+            <div class="message-text">${text}</div>
+            <div class="message-time">${time}</div>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function showTypingIndicator() {
+    const messagesContainer = document.getElementById('chatbotMessages');
+    const typing = document.createElement('div');
+    typing.id = 'typingIndicator';
+    typing.className = 'chatbot-message bot-message';
+    typing.innerHTML = `
+        <div class="message-avatar">🤖</div>
+        <div class="message-content">
+            <div class="message-text typing-indicator">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+            </div>
+        </div>
+    `;
+    messagesContainer.appendChild(typing);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const typing = document.getElementById('typingIndicator');
+    if (typing) typing.remove();
+}
+
+function getBotResponse(message) {
+    message = message.toLowerCase();
+    
+    if (message.includes('complaint') || message.includes('file') || message.includes('report')) {
+        return `To file a complaint:<br><br>
+        1️⃣ Click on "Report Issue" button<br>
+        2️⃣ Select category (Road, Drainage, etc.)<br>
+        3️⃣ Add location (click on map or use current location)<br>
+        4️⃣ Upload photos (our AI will verify automatically)<br>
+        5️⃣ Submit!<br><br>
+        You'll earn <strong>10 points</strong> and your complaint will be sent to the concerned authorities. 🎯`;
+    }
+    
+    if (message.includes('status') || message.includes('track')) {
+        return `To check complaint status:<br><br>
+        📍 Go to "My Activity" section in your profile<br>
+        📊 View all your complaints with real-time status updates<br>
+        🔔 You'll also receive notifications when status changes<br><br>
+        Status types: Pending → Assigned → In Progress → Resolved ✅`;
+    }
+    
+    if (message.includes('scheme') || message.includes('yojana')) {
+        return `Government schemes are personalized for you! 🎯<br><br>
+        We show schemes based on your profile:<br>
+        👨‍🎓 Students → Scholarships, skill training<br>
+        👩‍🌾 Farmers → PM-KISAN, crop insurance<br>
+        👷‍♂️ Workers → PMAY, health insurance<br><br>
+        Check the "My Schemes" section to see schemes you're eligible for!`;
+    }
+    
+    if (message.includes('leaderboard') || message.includes('points') || message.includes('rank')) {
+        return `Earn points for every civic action! 🏆<br><br>
+        📝 File complaint: <strong>+10 points</strong><br>
+        👍 Upvote issue: <strong>+2 points</strong><br>
+        🔥 Highlight priority: <strong>+5 points</strong><br>
+        ✅ Complaint resolved: <strong>+20 points</strong><br><br>
+        Climb the leaderboard and become a top contributor in your district! 🎯`;
+    }
+    
+    if (message.includes('ai') || message.includes('verification')) {
+        return `Our AI system verifies complaints automatically! 🤖<br><br>
+        ✅ Image Analysis: Detects potholes, garbage, damages<br>
+        ✅ Location Verification: Checks GPS coordinates<br>
+        ✅ Duplicate Detection: Prevents spam<br>
+        ✅ Priority Assessment: Urgency scoring<br><br>
+        No need for manual approval - instant submission! ⚡`;
+    }
+    
+    if (message.includes('help') || message.includes('support')) {
+        return `I'm here to help! 😊<br><br>
+        You can ask me about:<br>
+        • Filing complaints<br>
+        • Tracking status<br>
+        • Government schemes<br>
+        • Leaderboard & points<br>
+        • AI verification<br>
+        • Contractor ratings<br><br>
+        Just type your question or click the quick options above!`;
+    }
+    
+    return `Thanks for your message! 🙏<br><br>
+    I'm still learning to answer all questions. For immediate assistance:<br><br>
+    📞 Call: 1800-111-555 (Toll Free)<br>
+    📧 Email: support@indiainnovates.gov.in<br><br>
+    Or try asking me about complaints, schemes, or the leaderboard!`;
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        const badge = document.getElementById('chatbotBadge');
+        if (badge) {
+            badge.style.animation = 'pulse 0.5s ease-in-out 3';
+        }
+    }, 2000);
+});
+</script>

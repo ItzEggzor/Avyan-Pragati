@@ -1,0 +1,52 @@
+﻿
+
+
+<div class="top-bar">
+    <div class="top-bar-left">
+        <span class="phone-icon">📞 1800-111-555 (Toll Free)</span>
+        <span class="email-icon">📧 support@bharatmandapam.gov.in</span>
+        <span class="location-icon" id="topBarLocation">📍 New Delhi</span>
+    </div>
+    <div class="top-bar-right">
+        <select id="languageSelect" onchange="changeLanguage(this.value)" class="language-select">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+        </select>
+        <button class="theme-toggle-btn" onclick="toggleDarkTheme()" title="Toggle Dark Theme">
+            <span class="theme-icon">🌙</span>
+        </button>
+    </div>
+</div>
+
+
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <span class="logo-icon">🏛️</span>
+            <div class="logo-text">
+                <h1 class="translatable" data-en="Avyan Pragati" data-hi="अव्यान प्रगति">Avyan Pragati</h1>
+                <p class="translatable" data-en="Government Portal" data-hi="सरकारी पोर्टल">Government Portal</p>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <a href="#" class="translatable" data-en="Services" data-hi="सेवाएं">Services</a>
+            <a href="#" class="translatable" data-en="My Tasks" data-hi="मेरे कार्य">My Tasks</a>
+            <a href="#" class="translatable" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+            <a href="#" class="translatable" data-en="Settings" data-hi="सेटिंग्स">Settings</a>
+        </nav>
+        <div class="user-section">
+            <div class="user-info">
+                <span class="user-avatar">👤</span>
+                <div class="user-details">
+                    <div class="officer-header-row">
+                        <p class="user-name" id="officerName">Officer</p>
+                        <p class="user-role" id="officerRank">Senior Officer</p>
+                        <span class="rank-badge" id="rankBadge">⭐</span>
+                    </div>
+                    <p class="user-location" id="officerLocation">📍 New Delhi</p>
+                </div>
+            </div>
+            <button class="logout-btn translatable" data-en="Logout" data-hi="लॉगआउट" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,413 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complaint Command Center – Avyan Pragati</title>
+  <link rel="icon" type="image/png" href="/avyanpragati.png">
+  <link rel="stylesheet" href="/Gov/assets/css/base.css?v=202603081545" />
+  <link rel="stylesheet" href="/Gov/assets/css/professional-theme.css?v=202603081545" />
+  <link rel="stylesheet" href="/Gov/assets/css/digital-twin.css?v=202603081545" />
+  <script>
+    if (!localStorage.getItem('officerInfo')) {
+      window.location.href = '/gov/login';
+    }
+  </script>
+  <script>window.GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_API_KEY';</script>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, collection, query, where, orderBy, onSnapshot, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    const app = initializeApp({
+      apiKey: "YOUR_GOV_FIREBASE_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+      messagingSenderId: "YOUR_GOV_MESSAGING_SENDER_ID",
+      appId: "YOUR_GOV_FIREBASE_APP_ID"
+    });
+    window.govFirestore = getFirestore(app);
+    window.govFirestoreCollection = collection;
+    window.govFirestoreQuery = query;
+    window.govFirestoreWhere = where;
+    window.govFirestoreOrderBy = orderBy;
+    window.govFirestoreOnSnapshot = onSnapshot;
+    window.govFirestoreGetDocs = getDocs;
+    window.govFirestoreLimit = limit;
+  </script>
+</head>
+<body>
+
+  
+  <div class="dt-cmd-header">
+    <div class="dt-cmd-icon-wrap"></div>
+    <div class="dt-cmd-text">
+      <h1 class="dt-cmd-title">Complaint Command Center</h1>
+      <p class="dt-cmd-sub" id="dtCmdSub">Real-time national grievance intelligence — sorted by urgency &amp; state with India heatmap</p>
+    </div>
+  </div>
+
+  
+  <div class="dt-kpi-strip">
+    <div class="dt-kpi-card dt-kpi-total">
+      <div class="dt-kpi-icon"></div>
+      <span class="dt-kpi-value" id="totalComplaints">—</span>
+      <span class="dt-kpi-label">Total</span>
+    </div>
+    <div class="dt-kpi-card dt-kpi-critical">
+      <div class="dt-kpi-icon"></div>
+      <span class="dt-kpi-value" id="criticalCount">—</span>
+      <span class="dt-kpi-label">Critical</span>
+    </div>
+    <div class="dt-kpi-card dt-kpi-high">
+      <div class="dt-kpi-icon"></div>
+      <span class="dt-kpi-value" id="highCount">—</span>
+      <span class="dt-kpi-label">High</span>
+    </div>
+    <div class="dt-kpi-card dt-kpi-open">
+      <div class="dt-kpi-icon"></div>
+      <span class="dt-kpi-value" id="openCount">—</span>
+      <span class="dt-kpi-label">Open</span>
+    </div>
+    <div class="dt-kpi-card dt-kpi-progress">
+      <div class="dt-kpi-icon"></div>
+      <span class="dt-kpi-value" id="inProgressCount">—</span>
+      <span class="dt-kpi-label">In Progress</span>
+    </div>
+    <div class="dt-kpi-card dt-kpi-resolved">
+      <div class="dt-kpi-icon"></div>
+      <span class="dt-kpi-value" id="resolvedCount">—</span>
+      <span class="dt-kpi-label">Resolved</span>
+    </div>
+  </div>
+
+  
+  <div id="dtJurBanner" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(90deg,#f0f7ff,#e8f5e9);border-left:4px solid #1565c0;padding:10px 20px;font-size:13px;"></div>
+
+  
+  <div class="dt-workspace">
+
+    
+    <aside class="dt-left-panel">
+
+      
+      <div class="dt-search-row">
+        <div class="dt-search-wrap">
+          <span class="dt-search-icon"></span>
+          <input type="text" id="searchComplaint" class="dt-search-input"
+                 placeholder="Search ID, subject, state" oninput="filterComplaints()" />
+        </div>
+        <button class="dt-reset-btn" onclick="resetFilters()" title="Clear all filters"></button>
+      </div>
+
+      
+      <div class="dt-filter-row">
+        <select id="stateFilter" class="dt-select" onchange="filterComplaints()">
+          <option value="">All States</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Telangana">Telangana</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="Uttar Pradesh">Uttar Pradesh</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="Rajasthan">Rajasthan</option>
+          <option value="Madhya Pradesh">Madhya Pradesh</option>
+        </select>
+        <select id="statusFilter" class="dt-select" onchange="filterComplaints()">
+          <option value="">All Status</option>
+          <option value="open">Open</option>
+          <option value="in-progress">In Progress</option>
+          <option value="resolved">Resolved</option>
+        </select>
+      </div>
+
+      
+      <div class="dt-sort-row">
+        <label class="dt-sort-label">Sort by</label>
+        <select id="sortBy" class="dt-select dt-select-grow" onchange="sortComplaints()">
+          <option value="urgency-desc">Urgency: High  Low</option>
+          <option value="urgency-asc">Urgency: Low  High</option>
+          <option value="state">State A – Z</option>
+          <option value="date-newest">Date: Newest first</option>
+          <option value="date-oldest">Date: Oldest first</option>
+        </select>
+      </div>
+
+      
+      <div class="dt-urgency-strip">
+        <button class="filter-btn" data-urgency="all"      onclick="filterByUrgency('all')">All</button>
+        <button class="filter-btn" data-urgency="critical" onclick="filterByUrgency('critical')"> Critical</button>
+        <button class="filter-btn" data-urgency="high"     onclick="filterByUrgency('high')"> High</button>
+        <button class="filter-btn" data-urgency="medium"   onclick="filterByUrgency('medium')"> Medium</button>
+        <button class="filter-btn" data-urgency="low"      onclick="filterByUrgency('low')"> Low</button>
+      </div>
+
+      
+      <div class="dt-list-header">
+        <span class="dt-list-title">Complaints</span>
+        <span class="dt-list-count" id="listCount">— / —</span>
+      </div>
+
+      
+      <div class="dt-complaints-scroll" id="complaintsList">
+        <div class="dt-placeholder-msg">
+          <span class="dt-placeholder-icon"></span>
+          <span>Loading complaints</span>
+        </div>
+      </div>
+
+    </aside>
+
+    
+    <div class="dt-map-col">
+      <div class="dt-map-toolbar">
+        <div class="dt-map-tool-left">
+          <button id="btnHeatmap"  class="dt-map-btn active" onclick="toggleComplaintsHeat()"> Heatmap</button>
+          <button id="btnMarkers"  class="dt-map-btn"        onclick="toggleComplaintsMarkers()"> Markers</button>
+          <button                  class="dt-map-btn"        onclick="resetMapView()"> Reset</button>
+        </div>
+        <div class="dt-map-tool-right">
+          <button class="dt-map-type-btn" onclick="changeMapType('roadmap')">Road</button>
+          <button class="dt-map-type-btn" onclick="changeMapType('satellite')">Satellite</button>
+          <button class="dt-map-type-btn" onclick="changeMapType('terrain')">Terrain</button>
+        </div>
+      </div>
+      <div id="complaintsMap" class="dt-map-canvas"></div>
+    </div>
+
+    
+    <aside class="dt-right-panel">
+
+      
+      <div class="dt-rp-section dt-detail-section">
+        <div class="dt-rp-head">
+          <span class="dt-rp-icon"></span>
+          <span class="dt-rp-title">Complaint Detail</span>
+          <button class="dt-detail-close" id="btnDetailClose" onclick="closeComplaintDetail()" title="Close"></button>
+        </div>
+        
+        <div class="dt-detail-empty" id="dtDetailEmpty">
+          <div class="dt-detail-empty-icon"></div>
+          <p>Select a complaint from the list to view its full details here.</p>
+        </div>
+        
+        <div class="dt-detail-card" id="dtDetailCard" style="display:none">
+          <div class="dt-dc-top-row">
+            <span class="dt-dc-id" id="dtDcId">—</span>
+            <span class="dt-dc-urgency-badge" id="dtDcUrgency">—</span>
+          </div>
+          <p class="dt-dc-subject" id="dtDcSubject">—</p>
+          <div class="dt-dc-meta">
+            <div class="dt-dc-meta-item">
+              <span class="dt-dc-meta-lbl">📍 State</span>
+              <span class="dt-dc-meta-val" id="dtDcState">—</span>
+            </div>
+            <div class="dt-dc-meta-item">
+              <span class="dt-dc-meta-lbl">📅 Date</span>
+              <span class="dt-dc-meta-val" id="dtDcDate">—</span>
+            </div>
+          </div>
+          <div class="dt-dc-status-row">
+            <span class="dt-dc-meta-lbl">Status</span>
+            <span class="dt-dc-status-badge" id="dtDcStatus">—</span>
+          </div>
+          <p class="dt-dc-desc" id="dtDcDesc">—</p>
+          
+          <div id="dtDcRatings" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid #e2e8f0;">
+            <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:8px;">CONTRACTOR RATING</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div id="dtRatingStars" style="font-size:20px;color:#fbbf24;"></div>
+              <span id="dtRatingScore" style="font-size:14px;font-weight:600;color:#1e293b;"></span>
+            </div>
+            <p id="dtRatingFeedback" style="margin:8px 0 0;font-size:13px;color:#475569;line-height:1.5;font-style:italic;"></p>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="dt-rp-section" style="margin-top:16px;">
+        <div class="dt-rp-header">
+          <span class="dt-rp-icon">👷</span>
+          <span class="dt-rp-title">Active Contractors</span>
+        </div>
+        <div id="dtContractorsMenu" style="font-size:13px;color:#64748b;">
+          <div style="padding:12px;text-align:center;">📍 Loading contractors...</div>
+        </div>
+      </div>
+
+      
+      <div class="dt-rp-section dt-state-section">
+        <div class="dt-rp-head">
+          <span class="dt-rp-icon">📊</span>
+          <span class="dt-rp-title" id="dtSummaryTitle">Summary</span>
+        </div>
+        <div class="dt-state-chart" id="dtSummaryChart" style="max-height:340px;overflow-y:auto;padding-right:2px;">
+          <div class="dt-placeholder-msg">
+            <span class="dt-placeholder-icon"></span>
+            <span>Loading</span>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="dt-rp-section dt-heat-section">
+        <div class="dt-rp-head">
+          <span class="dt-rp-icon"></span>
+          <span class="dt-rp-title">Heatmap Controls</span>
+        </div>
+        <div class="dt-slider-group">
+          <label class="dt-slider-label">
+            <span>Radius</span>
+            <span class="dt-slider-val" id="radiusVal">40 km</span>
+          </label>
+          <input type="range" id="heatRadius" class="dt-slider"
+                 min="1" max="10" value="4"
+                 oninput="applyComplaintsHeatSettings()" />
+        </div>
+        <div class="dt-slider-group">
+          <label class="dt-slider-label">
+            <span>Intensity</span>
+            <span class="dt-slider-val" id="intensityVal">1.0</span>
+          </label>
+          <input type="range" id="heatIntensity" class="dt-slider"
+                 min="1" max="20" value="10"
+                 oninput="applyComplaintsHeatSettings()" />
+        </div>
+      </div>
+
+      
+      <div class="dt-rp-section dt-legend-section">
+        <div class="dt-rp-head">
+          <span class="dt-rp-icon"></span>
+          <span class="dt-rp-title">Legend</span>
+        </div>
+        <p class="dt-legend-sub">Urgency Level</p>
+        <div class="dt-legend-grid">
+          <div class="dt-legend-item"><span class="dt-ldot dt-ldot-critical"></span>Critical</div>
+          <div class="dt-legend-item"><span class="dt-ldot dt-ldot-high"></span>High</div>
+          <div class="dt-legend-item"><span class="dt-ldot dt-ldot-medium"></span>Medium</div>
+          <div class="dt-legend-item"><span class="dt-ldot dt-ldot-low"></span>Low</div>
+        </div>
+        <p class="dt-legend-sub" style="margin-top:10px">Case Status</p>
+        <div class="dt-legend-grid">
+          <div class="dt-legend-item"><span class="dt-ldot dt-ldot-open"></span>Open</div>
+          <div class="dt-legend-item"><span class="dt-ldot dt-ldot-inprogress"></span>In Progress</div>
+          <div class="dt-legend-item"><span class="dt-ldot dt-ldot-resolved"></span>Resolved</div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  
+  <script src="/Gov/assets/js/digital-twin.js?v=202603100900"></script>
+
+  
+  <script>
+  ;(function () {
+
+    
+    var _origHL = window.highlightComplaint;
+    window.highlightComplaint = function (complaint) {
+      _origHL.apply(this, arguments);
+      _showDetail(complaint);
+    };
+
+    window.closeComplaintDetail = function () {
+      document.getElementById('dtDetailCard').style.display  = 'none';
+      document.getElementById('dtDetailEmpty').style.display = 'block';
+      document.getElementById('btnDetailClose').style.display = 'none';
+      document.querySelectorAll('.complaint-item').forEach(function (el) {
+        el.classList.remove('active');
+      });
+    };
+
+    function _showDetail(c) {
+      var urgency     = c.urgency || 'low';
+      var statusLabel = { open: 'Open', 'in-progress': 'In Progress', resolved: 'Resolved' }[c.status] || c.status;
+
+      document.getElementById('dtDcId').textContent      = c.id;
+      document.getElementById('dtDcSubject').textContent = c.subject;
+      document.getElementById('dtDcState').textContent   = c.state;
+      document.getElementById('dtDcDate').textContent    = c.date;
+      document.getElementById('dtDcDesc').textContent    = c.description || 'No description provided.';
+
+      var uEl = document.getElementById('dtDcUrgency');
+      uEl.textContent = urgency.charAt(0).toUpperCase() + urgency.slice(1);
+      uEl.className   = 'dt-dc-urgency-badge dt-ub-' + urgency;
+
+      var sEl = document.getElementById('dtDcStatus');
+      sEl.textContent = statusLabel;
+      sEl.className   = 'dt-dc-status-badge dt-sb-status-' + c.status;
+
+      document.getElementById('dtDetailCard').style.display   = 'block';
+      document.getElementById('dtDetailEmpty').style.display  = 'none';
+      document.getElementById('btnDetailClose').style.display = 'inline-flex';
+    }
+
+    
+    var _tries = 0;
+    var _poll = setInterval(function () {
+      if (window.allComplaints && window.allComplaints.length > 0) {
+        clearInterval(_poll);
+        _updateExtraStats();
+        _renderStateBreakdown();
+      }
+      if (++_tries > 80) clearInterval(_poll);
+    }, 250);
+
+    function _updateExtraStats() {
+      var ac = window.allComplaints;
+      document.getElementById('highCount').textContent        = ac.filter(function(c){ return c.urgency === 'high'; }).length;
+      document.getElementById('inProgressCount').textContent  = ac.filter(function(c){ return c.status  === 'in-progress'; }).length;
+      document.getElementById('resolvedCount').textContent    = ac.filter(function(c){ return c.status  === 'resolved'; }).length;
+    }
+
+    function _renderStateBreakdown() {
+      var ac  = window.allComplaints;
+      var map = {};
+      ac.forEach(function (c) {
+        if (!map[c.state]) map[c.state] = { critical:0, high:0, medium:0, low:0, total:0 };
+        map[c.state][c.urgency]++;
+        map[c.state].total++;
+      });
+
+      
+      var states = Object.keys(map).sort(function (a, b) {
+        var wa = map[a].critical*4 + map[a].high*3 + map[a].medium*2 + map[a].low;
+        var wb = map[b].critical*4 + map[b].high*3 + map[b].medium*2 + map[b].low;
+        return wb - wa;
+      });
+
+      var html = '';
+      states.forEach(function (s) {
+        var d   = map[s];
+        var pct = function (n) { return n ? Math.round(n / d.total * 100) : 0; };
+        html +=
+          '<div class="dt-sb-row">' +
+            '<div class="dt-sb-name">' + s + '</div>' +
+            '<div class="dt-sb-bars">' +
+              (d.critical ? '<span class="dt-sb-seg dt-sb-c" style="width:' + pct(d.critical) + '%"></span>' : '') +
+              (d.high     ? '<span class="dt-sb-seg dt-sb-h" style="width:' + pct(d.high)     + '%"></span>' : '') +
+              (d.medium   ? '<span class="dt-sb-seg dt-sb-m" style="width:' + pct(d.medium)   + '%"></span>' : '') +
+              (d.low      ? '<span class="dt-sb-seg dt-sb-l" style="width:' + pct(d.low)      + '%"></span>' : '') +
+            '</div>' +
+            '<div class="dt-sb-total">' + d.total + '</div>' +
+          '</div>';
+      });
+      document.getElementById('dtStateChart').innerHTML = html || '<p class="dt-placeholder-msg">No data</p>';
+    }
+
+  }());
+  </script>
+
+  
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=visualization,marker&callback=initComplaintsMap&loading=async&region=IN&language=en">
+  </script>
+
+</body>
+</html>

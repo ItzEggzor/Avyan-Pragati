@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Lifecycle Management – Avyan Pragati</title>
+    <link rel="icon" type="image/png" href="/avyanpragati.png">
+    <link rel="stylesheet" href="/Gov/assets/css/base.css?v=202603081547">
+    <link rel="stylesheet" href="/Gov/assets/css/professional-theme.css?v=202603081547">
+    <link rel="stylesheet" href="/Gov/assets/css/project-lifecycle.css?v=202603081547">
+    <script>
+        if (!localStorage.getItem('officerInfo')) {
+            window.location.href = '/gov/login';
+        }
+    </script>
+    <script>window.GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_API_KEY';</script>
+    
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, getDocs, limit, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        
+        // TODO: Replace placeholder values below with your actual Firebase project credentials.
+        const firebaseConfig = {
+            apiKey: "YOUR_GOOGLE_MAPS_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+            messagingSenderId: "YOUR_PROJECT2_MESSAGING_SENDER_ID",
+            appId: "YOUR_PROJECT2_FIREBASE_APP_ID",
+            measurementId: "YOUR_PROJECT2_GA_MEASUREMENT_ID"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        window.govFirestore = db;
+        window.govFirestoreCollection = collection;
+        window.govFirestoreAddDoc = addDoc;
+        window.govFirestoreQuery = query;
+        window.govFirestoreWhere = where;
+        window.govFirestoreOrderBy = orderBy;
+        window.govFirestoreOnSnapshot = onSnapshot;
+        window.govFirestoreGetDocs = getDocs;
+        window.govFirestoreLimit = limit;
+        window.govFirestoreDoc = doc;
+        window.govFirestoreUpdateDoc = updateDoc;
+        window.govFirestoreSetDoc = setDoc;
+    </script>
+</head>
+<body>
+
+    
+    <div class="pl-topbar">
+        <div class="pl-topbar-left">
+            <span>&#128222; 1800-111-555 (Toll Free)</span>
+            <span>&#128231; support@bharatmandapam.gov.in</span>
+        </div>
+        <div class="pl-topbar-right">
+            <button class="pl-theme-btn" onclick="togglePLTheme()">&#127769;</button>
+        </div>
+    </div>
+
+    
+    <header class="pl-header">
+        <div class="pl-header-inner">
+            <div class="pl-header-left">
+                <span class="pl-header-icon">&#127959;&#65039;</span>
+                <div>
+                    <h1 class="pl-header-title">Project Lifecycle Management</h1>
+                    <p class="pl-header-sub">Contractor Tracking &bull; Work Updates &bull; Official Approval Portal</p>
+                </div>
+            </div>
+            <div class="pl-header-right">
+                <a class="pl-back-link" href="#"
+                   onclick="if(window.parent&&window.parent.loadHome){window.parent.loadHome();}else{window.location.href='/gov/dashboard';}return false;">
+                    &larr; Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    
+    <div class="pl-body">
+
+        
+        <aside class="pl-left-panel">
+
+            
+            <button onclick="openNewProjectModal()" style="width: 100%; padding: 14px 20px; margin-bottom: 20px; background: #FF9933; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px;" onmouseover="this.style.background='#f97316'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)';" onmouseout="this.style.background='#FF9933'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)';">
+                <i class="fas fa-plus-circle"></i>
+                <span>Create New Project</span>
+            </button>
+
+            
+            <div class="pl-status-pills">
+                <button class="status-btn active" data-status="all"             onclick="setStatusFilter(this,'all')">All</button>
+                <button class="status-btn"        data-status="active"          onclick="setStatusFilter(this,'active')">Active</button>
+                <button class="status-btn"        data-status="pending_approval" onclick="setStatusFilter(this,'pending_approval')">&#9203; Pending</button>
+                <button class="status-btn"        data-status="approved"        onclick="setStatusFilter(this,'approved')">&#9989; Approved</button>
+                <button class="status-btn"        data-status="completed"       onclick="setStatusFilter(this,'completed')">&#127937; Done</button>
+                <button class="status-btn"        data-status="rejected"        onclick="setStatusFilter(this,'rejected')">&#10060; Rejected</button>
+            </div>
+
+            
+            <div class="pl-filters">
+                <input class="pl-input" id="plSearch" type="text"
+                       placeholder="Search project name or ID&hellip;" oninput="applyFilters()">
+                <div class="pl-filter-row-2">
+                    <select class="pl-select" id="plCategoryFilter" onchange="applyFilters()">
+                        <option value="">All Categories</option>
+                        <option>Road</option>
+                        <option>Bridge</option>
+                        <option>Metro</option>
+                        <option>Water</option>
+                        <option>Power</option>
+                        <option>Coastal</option>
+                        <option>Smart City</option>
+                        <option>Building</option>
+                    </select>
+                    <select class="pl-select" id="plStateFilter" onchange="applyFilters()">
+                        <option value="">All States</option>
+                        
+                    </select>
+                </div>
+                <div class="pl-progress-row">
+                    <label class="pl-progress-label">
+                        Min. Progress: <span id="plProgressVal">0%</span>
+                    </label>
+                    <input class="pl-range" type="range" id="plProgressFilter"
+                           min="0" max="100" value="0"
+                           oninput="document.getElementById('plProgressVal').textContent=this.value+'%'; applyFilters()">
+                </div>
+                <div class="pl-filter-footer">
+                    <span class="pl-count-label">Showing <strong id="plCount">0 / 0</strong></span>
+                    <button class="pl-reset-btn" onclick="resetFilters()">&#8635; Reset</button>
+                </div>
+            </div>
+
+            
+            <div id="plProjectsContainer" class="pl-projects-list"></div>
+
+        </aside>
+
+        
+        <div class="pl-right-content">
+
+            
+            <div class="pl-map-wrapper">
+                <div id="projectsMap" class="pl-map"></div>
+                <div class="pl-map-bar">
+                    <select class="pl-map-type-select" onchange="changeMapType(this.value)">
+                        <option value="roadmap">&#128506; Roadmap</option>
+                        <option value="satellite">&#128752; Satellite</option>
+                        <option value="terrain">&#127956;&#65039; Terrain</option>
+                        <option value="hybrid">&#127760; Hybrid</option>
+                    </select>
+                    <div class="pl-map-legend">
+                        <span class="pl-legend-dot" style="background:#28a745"></span> Active
+                        <span class="pl-legend-dot" style="background:#fd7e14;margin-left:8px"></span> Pending
+                        <span class="pl-legend-dot" style="background:#007bff;margin-left:8px"></span> Approved
+                        <span class="pl-legend-dot" style="background:#6c757d;margin-left:8px"></span> Completed
+                        <span class="pl-legend-dot" style="background:#dc3545;margin-left:8px"></span> Rejected
+                    </div>
+                </div>
+            </div>
+
+            
+            <div id="plDetailPanel" class="pl-detail-panel">
+                <div id="plDetailPlaceholder" class="pl-placeholder">
+                    <div class="pl-placeholder-icon">&#127959;&#65039;</div>
+                    <div class="pl-placeholder-text">
+                        Select a project from the list or click a map marker to view full details,
+                        approve contractor updates, or submit new work progress reports.
+                    </div>
+                </div>
+                <div id="plProjectDetail" style="display:none; overflow-y:auto; height:100%; padding:16px;"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    
+    <div id="plApprovalModal" class="pl-modal-overlay" style="display:none">
+        <div class="pl-modal">
+            <div class="pl-modal-header">
+                <h3 id="plModalTitle" class="pl-modal-title">Official Review</h3>
+                <button class="pl-modal-close" onclick="closePLModal()">&#x2715;</button>
+            </div>
+            <p id="plModalDesc" class="pl-modal-desc"></p>
+            <div class="pl-modal-body">
+                <label class="pl-modal-label">Official Remarks / Comments</label>
+                <textarea id="plModalComment" class="pl-modal-textarea" rows="4"
+                          placeholder="Add your official remarks here&hellip;"></textarea>
+            </div>
+            <div class="pl-modal-footer">
+                <button class="pl-modal-cancel" onclick="closePLModal()">Cancel</button>
+                <button id="plModalConfirmBtn" class="pl-modal-confirm confirm-approve">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="plUploadModal" class="pl-modal-overlay" style="display:none">
+        <div class="pl-modal pl-upload-modal">
+            <div class="pl-modal-header">
+                <h3 class="pl-modal-title">&#128247; Submit Work Update</h3>
+                <button class="pl-modal-close" onclick="closePLUploadModal()">&#x2715;</button>
+            </div>
+            <div class="pl-modal-body">
+                <label class="pl-modal-label">Work Description *</label>
+                <textarea id="plUploadDesc" class="pl-modal-textarea" rows="4"
+                          placeholder="Describe the work completed, materials used, and any issues encountered&hellip;"></textarea>
+
+                <label class="pl-modal-label" style="margin-top:14px">
+                    Reported Completion: <strong><span id="plUploadProgressVal">50%</span></strong>
+                </label>
+                <input class="pl-range" type="range" id="plUploadProgress"
+                       min="0" max="100" value="50"
+                       oninput="document.getElementById('plUploadProgressVal').textContent=this.value+'%'">
+
+                <label class="pl-modal-label" style="margin-top:14px">Add Site Photos</label>
+                <div class="pl-photo-btns">
+                    <button class="pl-photo-add-btn" onclick="simulatePhotoAdd('site')">+ Site Overview</button>
+                    <button class="pl-photo-add-btn" onclick="simulatePhotoAdd('foundation')">+ Foundation</button>
+                    <button class="pl-photo-add-btn" onclick="simulatePhotoAdd('material')">+ Materials</button>
+                    <button class="pl-photo-add-btn" onclick="simulatePhotoAdd('progress')">+ Progress</button>
+                </div>
+                <div id="plUploadPreview" class="pl-upload-preview"></div>
+            </div>
+            <div class="pl-modal-footer">
+                <button class="pl-modal-cancel" onclick="closePLUploadModal()">Cancel</button>
+                <button class="pl-modal-confirm confirm-approve" onclick="submitWorkUpdate()">&#128228; Submit Update</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="plNewProjectModal" class="pl-modal-overlay" style="display:none">
+        <div class="pl-modal pl-upload-modal" style="max-width: 650px;">
+            <div class="pl-modal-header">
+                <h3 class="pl-modal-title">&#127959;&#65039; Create New Project</h3>
+                <button class="pl-modal-close" onclick="closeNewProjectModal()">&#x2715;</button>
+            </div>
+            <div class="pl-modal-body">
+                <label class="pl-modal-label">Project Name *</label>
+                <input type="text" id="newProjName" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;"
+                       placeholder="e.g., NH-48 Flyover Construction Phase 2">
+                
+                <label class="pl-modal-label" style="margin-top:14px">Description *</label>
+                <textarea id="newProjDesc" class="pl-modal-textarea" rows="3"
+                          placeholder="Detailed project description including scope, objectives, and expected outcomes..."></textarea>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+                    <div>
+                        <label class="pl-modal-label">Category *</label>
+                        <select id="newProjCategory" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;">
+                            <option value="">Select Category</option>
+                            <option>Road</option>
+                            <option>Bridge</option>
+                            <option>Metro</option>
+                            <option>Water</option>
+                            <option>Power</option>
+                            <option>Coastal</option>
+                            <option>Smart City</option>
+                            <option>Building</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="pl-modal-label">Scope / Visibility *</label>
+                        <select id="newProjScope" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;" onchange="handleScopeChange()">
+                            <option value="">Select Scope</option>
+                            <option value="national">National Level (All Citizens)</option>
+                            <option value="state">State Level (State Residents)</option>
+                            <option value="district">District Level (District Residents)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="newProjLocationFields" style="display:none;margin-top:14px;gap:14px;" class="pl-filter-row-2">
+                    <div>
+                        <label class="pl-modal-label">State</label>
+                        <select id="newProjState" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;">
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                    <div id="newProjDistrictWrapper" style="display:none;">
+                        <label class="pl-modal-label">District</label>
+                        <input type="text" id="newProjDistrict" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;"
+                               placeholder="e.g., Mumbai Suburban">
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+                    <div>
+                        <label class="pl-modal-label">Budget (₹ Crores) *</label>
+                        <input type="number" id="newProjBudget" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;"
+                               placeholder="e.g., 45.2" step="0.1">
+                    </div>
+                    <div>
+                        <label class="pl-modal-label">Deadline *</label>
+                        <input type="date" id="newProjDeadline" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;">
+                    </div>
+                </div>
+
+                <label class="pl-modal-label" style="margin-top:14px">Contractor Name</label>
+                <input type="text" id="newProjContractor" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;"
+                       placeholder="e.g., Larsen & Toubro Ltd.">
+
+                <label class="pl-modal-label" style="margin-top:14px">Project Location</label>
+                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:14px;">
+                    <div style="color:#64748b;font-size:11px;margin-bottom:8px;">
+                        <i class="fas fa-map-marker-alt" style="color:#3b82f6;"></i>
+                        Click on the map to set project location, or enter coordinates manually below
+                    </div>
+                    <div id="newProjMapCanvas" style="width:100%;height:250px;border-radius:6px;background:#e2e8f0;"></div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div>
+                        <label class="pl-modal-label">Latitude</label>
+                        <input type="number" id="newProjLat" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;"
+                               placeholder="e.g., 28.6139" step="0.0001" oninput="updateMapMarkerFromInputs()">
+                    </div>
+                    <div>
+                        <label class="pl-modal-label">Longitude</label>
+                        <input type="number" id="newProjLng" class="pl-modal-textarea" style="min-height:auto;padding:10px;font-family:inherit;"
+                               placeholder="e.g., 77.2090" step="0.0001" oninput="updateMapMarkerFromInputs()">
+                    </div>
+                </div>
+            </div>
+            <div class="pl-modal-footer">
+                <button class="pl-modal-cancel" onclick="closeNewProjectModal()">Cancel</button>
+                <button class="pl-modal-confirm confirm-approve" onclick="submitNewProject()">&#10133; Create Project</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="plToast" class="pl-toast"></div>
+
+
+
+    <style>
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+    </style>
+
+    <script src="/Gov/assets/js/project-lifecycle.js?v=202603081547"></script>
+    <script>
+        (function() {
+            var s = document.createElement('script');
+            s.src = 'https://maps.googleapis.com/maps/api/js'
+                  + '?key=' + window.GOOGLE_MAPS_API_KEY
+                  + '&region=IN'
+                  + '&language=en'
+                  + '&callback=initProjectsMap';
+            s.async = true;
+            document.head.appendChild(s);
+        })();
+    </script>
+</body>
+</html>

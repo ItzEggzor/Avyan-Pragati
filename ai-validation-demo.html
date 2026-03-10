@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Validation Demo - 7-Layer Security System | PS-CRM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .demo-header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .demo-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .demo-content {
+            padding: 40px;
+        }
+
+        .validation-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .validation-step {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 6px solid #cbd5e1;
+            transition: all 0.3s;
+        }
+
+        .validation-step.processing {
+            border-left-color: #3b82f6;
+            background: #eff6ff;
+            animation: pulse 2s infinite;
+        }
+
+        .validation-step.passed {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .validation-step.failed {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: white;
+            border: 2px solid #e2e8f0;
+        }
+
+        .step-icon.processing {
+            border-color: #3b82f6;
+            animation: spin 2s linear infinite;
+        }
+
+        .step-icon.passed {
+            border-color: #10b981;
+            background: #10b981;
+            color: white;
+        }
+
+        .step-icon.failed {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .step-title {
+            flex: 1;
+        }
+
+        .step-title h3 {
+            font-size: 18px;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .step-title p {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .step-status {
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .step-status.pending {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .step-status.processing {
+            background: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .step-status.passed {
+            background: #dcfce7;
+            color: #10b981;
+        }
+
+        .step-status.failed {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .step-details {
+            margin-top: 16px;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .step-details.show {
+            display: block;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .demo-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-btn.primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .demo-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .demo-btn.secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .demo-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .final-verdict {
+            margin-top: 32px;
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .final-verdict.approved {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            display: block;
+        }
+
+        .final-verdict.rejected {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            display: block;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            width: 0%;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🤖 AI-Powered Complaint Validation System</h1>
+            <p>7-Layer Security & Fraud Detection - Live Demo</p>
+        </div>
+
+        <div class="demo-content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+
+            <div class="validation-steps">
+                
+                <div class="validation-step" id="step1">
+                    <div class="step-header">
+                        <div class="step-icon">🏠</div>
+                        <div class="step-title">
+                            <h3>Layer 1: Indoor Detection</h3>
+                            <p>Verifies complaint is recorded outdoors at actual location</p>
+                        </div>
+                        <div class="step-status pending">Pending</div>
+                    </div>
+                    <div class="step-details">
+                        <strong>✓ Analysis Complete:</strong> Outdoor environment confirmed. No indoor indicators (walls, ceiling, furniture) detected. Lighting and shadow analysis confirms natural outdoor conditions.
+                    </div>
+                </div>
+
+                
+                <div class="validation-step" id="step2">
+                    <div class="step-header">
+                        <div class="step-icon">👁️</div>
+                        <div class="step-title">
+                            <h3>Layer 2: Object Detection (YOLOv8)</h3>
+                            <p>AI identifies civic issue objects in video/image</p>
+                        </div>
+                        <div class="step-status pending">Pending</div>
+                    </div>
+                    <div class="step-details">
+                        <strong>✓ Objects Detected:</strong> Pothole identified with 87% confidence. Road surface degradation visible. Size estimated at 2.3m x 1.8m. Hazard level: Medium-High.
+                    </div>
+                </div>
+
+                
+                <div class="validation-step" id="step3">
+                    <div class="step-header">
+                        <div class="step-icon">📐</div>
+                        <div class="step-title">
+                            <h3>Layer 3: 360° Gyroscope Verification</h3>
+                            <p>Ensures video captured with proper rotation (min 180°)</p>
+                        </div>
+                        <div class="step-status pending">Pending</div>
+                    </div>
+                    <div class="step-details">
+                        <strong>✓ Rotation Confirmed:</strong> 192° rotation detected. Device moved in proper arc pattern. Prevents static/fraudulent submissions. Timestamp consistent throughout recording.
+                    </div>
+                </div>
+
+                
+                <div class="validation-step" id="step4">
+                    <div class="step-header">
+                        <div class="step-icon">📍</div>
+                        <div class="step-title">
+                            <h3>Layer 4: GPS & Location Validation</h3>
+                            <p>Verifies GPS coordinates and timestamp</p>
+                        </div>
+                        <div class="step-status pending">Pending</div>
+                    </div>
+                    <div class="step-details">
+                        <strong>✓ GPS Verified:</strong> Location: 28.6139°N, 77.2090°E (Sector 12, New Delhi). Timestamp: Mar 8, 2026 14:32 IST. GPS accuracy: ±8 meters. Within municipal jurisdiction.
+                    </div>
+                </div>
+
+                
+                <div class="validation-step" id="step5">
+                    <div class="step-header">
+                        <div class="step-icon">🔤</div>
+                        <div class="step-title">
+                            <h3>Layer 5: Profanity & Gibberish Filter</h3>
+                            <p>NLP checks for valid complaint description</p>
+                        </div>
+                        <div class="step-status pending">Pending</div>
+                    </div>
+                    <div class="step-details">
+                        <strong>✓ Text Validated:</strong> Clean language detected. No profanity. Description is coherent and civic-related. Sentiment analysis: Urgent, frustrated tone. Keywords match civic complaint patterns.
+                    </div>
+                </div>
+
+                
+                <div class="validation-step" id="step6">
+                    <div class="step-header">
+                        <div class="step-icon">🔗</div>
+                        <div class="step-title">
+                            <h3>Layer 6: Text-Video Mismatch Detection</h3>
+                            <p>Cross-verifies complaint description matches video content</p>
+                        </div>
+                        <div class="step-status pending">Pending</div>
+                    </div>
+                    <div class="step-details">
+                        <strong>✓ Content Matched:</strong> Complaint text describes "large pothole on main road". Video shows pothole on road surface. No contradictions detected. Visual evidence supports written claim. Match confidence: 91%.
+                    </div>
+                </div>
+
+                
+                <div class="validation-step" id="step7">
+                    <div class="step-header">
+                        <div class="step-icon">🔍</div>
+                        <div class="step-title">
+                            <h3>Layer 7: Duplicate Detection</h3>
+                            <p>Checks for similar complaints in vicinity</p>
+                        </div>
+                        <div class="step-status pending">Pending</div>
+                    </div>
+                    <div class="step-details">
+                        <strong>✓ No Duplicates:</strong> Searched 500m radius. No similar complaints found in last 30 days. Unique complaint verified. Complaint ID assigned: CMP-2847.
+                    </div>
+                </div>
+            </div>
+
+            <div class="final-verdict" id="verdict">
+                <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+                <div style="font-size: 24px; margin-bottom: 8px;">COMPLAINT APPROVED</div>
+                <div style="font-size: 14px; opacity: 0.9;">All 7 validation layers passed. Complaint forwarded to PWD department.</div>
+            </div>
+
+            <div class="demo-controls">
+                <button class="demo-btn primary" onclick="startDemo()">
+                    <i class="fas fa-play"></i> Start Demo
+                </button>
+                <button class="demo-btn secondary" onclick="resetDemo()">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 7;
+        let demoRunning = false;
+
+        function startDemo() {
+            if (demoRunning) return;
+            demoRunning = true;
+            resetDemo();
+            currentStep = 0;
+            processNextStep();
+        }
+
+        function resetDemo() {
+            demoRunning = false;
+            currentStep = 0;
+            document.getElementById('progress').style.width = '0%';
+            document.getElementById('verdict').className = 'final-verdict';
+            
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.getElementById(`step${i}`);
+                step.className = 'validation-step';
+                const status = step.querySelector('.step-status');
+                status.className = 'step-status pending';
+                status.textContent = 'Pending';
+                const icon = step.querySelector('.step-icon');
+                icon.className = 'step-icon';
+                const details = step.querySelector('.step-details');
+                details.classList.remove('show');
+            }
+        }
+
+        function processNextStep() {
+            if (currentStep >= totalSteps) {
+                showFinalVerdict();
+                return;
+            }
+
+            currentStep++;
+            const step = document.getElementById(`step${currentStep}`);
+            const status = step.querySelector('.step-status');
+            const icon = step.querySelector('.step-icon');
+            const details = step.querySelector('.step-details');
+
+            step.classList.add('processing');
+            status.className = 'step-status processing';
+            status.textContent = 'Processing...';
+            icon.classList.add('processing');
+
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+
+            setTimeout(() => {
+                step.classList.remove('processing');
+                step.classList.add('passed');
+                status.className = 'step-status passed';
+                status.textContent = '✓ Passed';
+                icon.classList.remove('processing');
+                icon.classList.add('passed');
+                icon.textContent = '✓';
+                details.classList.add('show');
+
+                setTimeout(processNextStep, 800);
+            }, 1500);
+        }
+
+        function showFinalVerdict() {
+            document.getElementById('verdict').className = 'final-verdict approved';
+            demoRunning = false;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,902 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contractor Login - Avyan Pragati</title>
+    <link rel="icon" type="image/png" href="avyanpragati.png">
+    
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --saffron: #FF9933;
+            --india-green: #138808;
+            --india-blue: #0052CC;
+            --india-navy: #001A4D;
+            --bg: #f0f4f8;
+            --bg-alt: #f8fafce6;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e1e7ef;
+            --border-light: #edf1f7;
+            --accent: #FF9933;
+            --error: #DC2626;
+            --success: #16A34A;
+            --font-sans: 'Inter', sans-serif;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,.06);
+            --shadow-md: 0 8px 24px rgba(0,0,0,.10);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,.14);
+        }
+        
+        [data-theme="dark"] {
+            --bg: #0a0e1a;
+            --bg-alt: #111827e6;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --border-light: #334155;
+        }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: var(--font-sans);
+            background: linear-gradient(135deg, #f0f4f8 0%, #e6edf5 100%);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(255,153,51,.08) 0%, transparent 50%),
+                       radial-gradient(circle at 80% 70%, rgba(19,136,8,.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0a0e1a 0%, #0f172a 100%);
+        }
+        
+        [data-theme="dark"] body::before {
+            background: radial-gradient(circle at 20% 30%, rgba(255,153,51,.04) 0%, transparent 50%),
+                       radial-gradient(circle at 80% 70%, rgba(19,136,8,.03) 0%, transparent 50%);
+        }
+        
+         
+        header {
+            background: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255,153,51,.12);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, .06);
+        }
+        
+        [data-theme="dark"] header {
+            background: rgba(17, 24, 39, .88);
+            border-bottom-color: rgba(255,153,51,.08);
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.02em;
+        }
+        
+        .brand i {
+            color: var(--saffron);
+            font-size: 22px;
+            filter: drop-shadow(0 2px 4px rgba(255,153,51,.3));
+        }
+        
+        .tagline {
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 1.2px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .theme-toggle {
+            background: rgba(248, 250, 252, .6);
+            border: 1.5px solid rgba(226, 232, 240, .8);
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: all 0.25s;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255,247,237,.8);
+            border-color: rgba(255,153,51,.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(255,153,51,.15);
+        }
+        
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(26, 35, 50, .6);
+            border-color: rgba(255, 255, 255, .1);
+        }
+        
+        
+        .main-container {
+            flex: 1;
+            max-width: 540px;
+            width: 100%;
+            margin: 50px auto;
+            padding: 0 24px;
+        }
+        
+        
+        .login-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, .95) 0%, rgba(255, 255, 255, .9) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, .6);
+            border-radius: 24px;
+            padding: 56px 48px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .08), 0 0 0 1px rgba(255,153,51,.04);
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,153,51,.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        [data-theme="dark"] .login-card {
+            background: linear-gradient(135deg, rgba(17, 24, 39, .92) 0%, rgba(26, 35, 50, .88) 100%);
+            border-color: rgba(255, 255, 255, .1);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 44px;
+            position: relative;
+        }
+        
+        .login-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            filter: drop-shadow(0 8px 16px rgba(255,153,51,.2));
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .login-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 16px 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: var(--font-sans);
+            font-size: 15px;
+            background: rgba(255, 255, 255, .6);
+            backdrop-filter: blur(8px);
+            color: var(--text-primary);
+            transition: all 0.25s;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,.03);
+        }
+        
+        .form-group input:focus {
+            border-color: var(--saffron);
+            background: rgba(255, 255, 255, .9);
+            box-shadow: 0 0 0 4px rgba(255, 153, 51, 0.1), 0 4px 12px rgba(255,153,51,.15);
+            transform: translateY(-2px);
+        }
+        
+        [data-theme="dark"] .form-group input {
+            background: rgba(26, 35, 50, .6);
+            border-color: rgba(255, 255, 255, .1);
+        }
+        
+        .form-group input::placeholder { color: var(--text-muted); }
+        
+        .btn-login {
+            width: 100%;
+            padding: 17px;
+            background: linear-gradient(135deg, #FF9933 0%, #f97316 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 16px;
+            box-shadow: 0 4px 16px rgba(255, 153, 51, .3), inset 0 1px 0 rgba(255,255,255,.2);
+            letter-spacing: 0.02em;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(255, 153, 51, 0.45), inset 0 1px 0 rgba(255,255,255,.3);
+        }
+        
+        .btn-login:hover::before { opacity: 1; }
+        
+        .btn-login:active {
+            transform: translateY(-1px);
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 24px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: var(--border);
+        }
+        
+        .divider span {
+            background: var(--bg);
+            padding: 0 16px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            position: relative;
+        }
+        
+        .signup-link {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .signup-link a {
+            color: var(--saffron);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .signup-link a:hover { text-decoration: underline; }
+        
+        .error-msg {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        
+        [data-theme="dark"] .error-msg {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-link a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .back-link a:hover {
+            color: var(--text-primary);
+            text-decoration: underline;
+        }
+        
+        
+        .demo-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, .95) 0%, rgba(255, 255, 255, .9) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, .6);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .08), 0 0 0 1px rgba(255,153,51,.04);
+        }
+        
+        [data-theme="dark"] .demo-panel {
+            background: linear-gradient(135deg, rgba(17, 24, 39, .92) 0%, rgba(26, 35, 50, .88) 100%);
+            border-color: rgba(255, 255, 255, .1);
+        }
+        
+        .demo-toggle {
+            width: 100%;
+            padding: 20px 28px;
+            background: linear-gradient(135deg, #FF9933 0%, #f97316 100%);
+            color: white;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.2);
+        }
+        
+        .demo-toggle:hover {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 4px 16px rgba(255,153,51,.3);
+        }
+        
+        .demo-toggle-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .demo-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .demo-content.active {
+            max-height: 1200px;
+            padding: 28px;
+        }
+        
+        .demo-section {
+            margin-bottom: 28px;
+        }
+        
+        .demo-section:last-child { margin-bottom: 0; }
+        
+        .demo-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--saffron);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        
+        .demo-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border-color: var(--saffron);
+        }
+        
+        .demo-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .demo-company {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .demo-city {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .demo-spec {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .demo-cred {
+            background: var(--bg);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        
+        .demo-cred-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .demo-cred-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            max-width: 100%;
+        }
+        
+        .demo-badge {
+            font-size: 10px;
+            padding: 4px 8px;
+            background: var(--saffron);
+            color: white;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="header-container">
+            <div class="logo-text">
+                <div class="brand">
+                    <img src="avyanpragati.png" alt="Avyan Pragati" style="height:28px;width:28px;object-fit:contain;border-radius:4px;vertical-align:middle;">
+                    <span>Avyan Pragati</span>
+                </div>
+                <div class="tagline">CONTRACTOR PORTAL</div>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    
+    <div class="main-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">🏗️</div>
+                <h1>Contractor Login</h1>
+                <p>Sign in to manage your projects and work assignments</p>
+            </div>
+            
+            <div class="error-msg" id="errorMsg"></div>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Company Email</label>
+                    <input type="email" id="email" required placeholder="company@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Sign In to Portal
+                </button>
+            </form>
+            
+            <div class="signup-link">
+                New contractor? <a href="contractor-signup.html">Register your company</a>
+            </div>
+        </div>
+        
+        
+        <div class="demo-panel">
+            <button class="demo-toggle" onclick="toggleDemoPanel()" id="demoToggle">
+                <div class="demo-toggle-left">
+                    <i class="fas fa-key"></i>
+                    <span>Demo Credentials - Test Login</span>
+                </div>
+                <i class="fas fa-chevron-down" id="demoArrow"></i>
+            </button>
+            
+            <div class="demo-content" id="demoContent">
+                <div class="demo-section">
+                    <div class="demo-section-title">
+                        <i class="fas fa-building"></i> Metro City Contractors
+                    </div>
+                    <div class="demo-grid">
+                        <div class="demo-card" onclick="fillDemo('contractor.mumbai@example.com', 'demo123')">
+                            <div class="demo-card-header">
+                                <span class="demo-badge">METRO</span>
+                            </div>
+                            <div class="demo-company">Skyline Constructions</div>
+                            <div class="demo-city">📍 Mumbai, Maharashtra</div>
+                            <div class="demo-spec">Building Construction & Infrastructure</div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Email</div>
+                                <div class="demo-cred-value">contractor.mumbai@example.com</div>
+                            </div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Password</div>
+                                <div class="demo-cred-value">demo123</div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-card" onclick="fillDemo('contractor.delhi@example.com', 'demo123')">
+                            <div class="demo-card-header">
+                                <span class="demo-badge">METRO</span>
+                            </div>
+                            <div class="demo-company">Capital Infrastructure Ltd</div>
+                            <div class="demo-city">📍 Delhi</div>
+                            <div class="demo-spec">Metro & Rail Infrastructure</div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Email</div>
+                                <div class="demo-cred-value">contractor.delhi@example.com</div>
+                            </div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Password</div>
+                                <div class="demo-cred-value">demo123</div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-card" onclick="fillDemo('contractor.bangalore@example.com', 'demo123')">
+                            <div class="demo-card-header">
+                                <span class="demo-badge">METRO</span>
+                            </div>
+                            <div class="demo-company">Tech City Builders</div>
+                            <div class="demo-city">📍 Bengaluru, Karnataka</div>
+                            <div class="demo-spec">Building & IT Park Construction</div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Email</div>
+                                <div class="demo-cred-value">contractor.bangalore@example.com</div>
+                            </div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Password</div>
+                                <div class="demo-cred-value">demo123</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-section">
+                    <div class="demo-section-title">
+                        <i class="fas fa-city"></i> Major City Contractors
+                    </div>
+                    <div class="demo-grid">
+                        <div class="demo-card" onclick="fillDemo('contractor.chennai@example.com', 'demo123')">
+                            <div class="demo-company">Southern Engineering Works</div>
+                            <div class="demo-city">📍 Chennai, Tamil Nadu</div>
+                            <div class="demo-spec">Road & Bridge Construction</div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Email</div>
+                                <div class="demo-cred-value">contractor.chennai@example.com</div>
+                            </div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Password</div>
+                                <div class="demo-cred-value">demo123</div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-card" onclick="fillDemo('contractor.hyderabad@example.com', 'demo123')">
+                            <div class="demo-company">Deccan Builders Pvt Ltd</div>
+                            <div class="demo-city">📍 Hyderabad, Telangana</div>
+                            <div class="demo-spec">General Contractor - Multi-Category</div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Email</div>
+                                <div class="demo-cred-value">contractor.hyderabad@example.com</div>
+                            </div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Password</div>
+                                <div class="demo-cred-value">demo123</div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-card" onclick="fillDemo('contractor.kolkata@example.com', 'demo123')">
+                            <div class="demo-company">East India Construction Co</div>
+                            <div class="demo-city">📍 Kolkata, West Bengal</div>
+                            <div class="demo-spec">Water Supply & Drainage</div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Email</div>
+                                <div class="demo-cred-value">contractor.kolkata@example.com</div>
+                            </div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Password</div>
+                                <div class="demo-cred-value">demo123</div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-card" onclick="fillDemo('contractor.pune@example.com', 'demo123')">
+                            <div class="demo-company">Pune Smart City Infra</div>
+                            <div class="demo-city">📍 Pune, Maharashtra</div>
+                            <div class="demo-spec">Electrical Works & Smart City</div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Email</div>
+                                <div class="demo-cred-value">contractor.pune@example.com</div>
+                            </div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Password</div>
+                                <div class="demo-cred-value">demo123</div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-card" onclick="fillDemo('contractor.ahmedabad@example.com', 'demo123')">
+                            <div class="demo-company">Gujarat Mega Projects Ltd</div>
+                            <div class="demo-city">📍 Ahmedabad, Gujarat</div>
+                            <div class="demo-spec">Bridge & Expressway Construction</div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Email</div>
+                                <div class="demo-cred-value">contractor.ahmedabad@example.com</div>
+                            </div>
+                            <div class="demo-cred">
+                                <div class="demo-cred-label">Password</div>
+                                <div class="demo-cred-value">demo123</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="back-link">
+            <a href="index.html">← Back to Home</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, signInWithEmailAndPassword } from './firebase-config.js';
+        
+        const demoContractors = {
+            'contractor.mumbai@example.com': { 
+                company: 'Skyline Constructions', city: 'Mumbai', state: 'Maharashtra',
+                specialization: 'Building Construction & Infrastructure'
+            },
+            'contractor.delhi@example.com': { 
+                company: 'Capital Infrastructure Ltd', city: 'Delhi', state: 'Delhi',
+                specialization: 'Metro & Rail Infrastructure'
+            },
+            'contractor.bangalore@example.com': { 
+                company: 'Tech City Builders', city: 'Bengaluru', state: 'Karnataka',
+                specialization: 'Building & IT Park Construction'
+            },
+            'contractor.chennai@example.com': { 
+                company: 'Southern Engineering Works', city: 'Chennai', state: 'Tamil Nadu',
+                specialization: 'Road & Bridge Construction'
+            },
+            'contractor.hyderabad@example.com': { 
+                company: 'Deccan Builders Pvt Ltd', city: 'Hyderabad', state: 'Telangana',
+                specialization: 'General Contractor - Multi-Category'
+            },
+            'contractor.kolkata@example.com': { 
+                company: 'East India Construction Co', city: 'Kolkata', state: 'West Bengal',
+                specialization: 'Water Supply & Drainage'
+            },
+            'contractor.pune@example.com': { 
+                company: 'Pune Smart City Infra', city: 'Pune', state: 'Maharashtra',
+                specialization: 'Electrical Works & Smart City'
+            },
+            'contractor.ahmedabad@example.com': { 
+                company: 'Gujarat Mega Projects Ltd', city: 'Ahmedabad', state: 'Gujarat',
+                specialization: 'Bridge & Expressway Construction'
+            }
+        };
+        
+        window.handleLogin = async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            
+            try {
+                errorMsg.style.display = 'none';
+                
+                if (demoContractors[email] && password === 'demo123') {
+                    const demoId = 'demo_' + email.split('@')[0];
+                    const contractorData = demoContractors[email];
+                    
+                    localStorage.setItem('contractorInfo_' + demoId, JSON.stringify({
+                        email: email,
+                        companyName: contractorData.company,
+                        city: contractorData.city,
+                        state: contractorData.state,
+                        specialization: contractorData.specialization,
+                        registrationNumber: 'DEMO-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+                        isDemo: true
+                    }));
+                    
+                    localStorage.setItem('currentContractorId', demoId);
+                    localStorage.setItem('isDemoContractor', 'true');
+                    
+                    window.location.href = 'contractor.html';
+                    return;
+                }
+                
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                const contractorInfo = localStorage.getItem('contractorInfo_' + userCredential.user.uid);
+                if (!contractorInfo) {
+                    throw new Error('This account is not registered as a contractor.');
+                }
+                
+                localStorage.setItem('currentContractorId', userCredential.user.uid);
+                localStorage.setItem('isDemoContractor', 'false');
+                
+                window.location.href = 'contractor.html';
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMsg.textContent = error.message || 'Login failed. Please check your credentials.';
+                errorMsg.style.display = 'block';
+            }
+        };
+        
+        window.toggleTheme = function() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const themeToggle = document.getElementById('themeToggle');
+            if (newTheme === 'dark') {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i><span>Light</span>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i><span>Dark</span>';
+            }
+        };
+        
+        window.toggleDemoPanel = function() {
+            const content = document.getElementById('demoContent');
+            const arrow = document.getElementById('demoArrow');
+            content.classList.toggle('active');
+            
+            if (content.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        };
+        
+        window.fillDemo = function(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            
+            const emailField = document.getElementById('email');
+            const passwordField = document.getElementById('password');
+            emailField.style.borderColor = '#16A34A';
+            passwordField.style.borderColor = '#16A34A';
+            
+            setTimeout(() => {
+                emailField.style.borderColor = '';
+                passwordField.style.borderColor = '';
+            }, 1000);
+        };
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') {
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i><span>Light</span>';
+        }
+    </script>
+</body>
+</html>

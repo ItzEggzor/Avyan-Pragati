@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Officials Login - Avyan Pragati</title>
+    <link rel="icon" type="image/png" href="/avyanpragati.png">
+    
+    <!-- Performance: DNS-prefetch for Firebase -->
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
+    
+    <link rel="stylesheet" href="/Gov/assets/css/base.css?v=202603081547">
+    <link rel="stylesheet" href="/Gov/assets/css/login.css?v=202603081547">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        
+        // TODO: Replace placeholder values below with your actual Firebase project credentials.
+        const firebaseConfig = {
+            apiKey: "YOUR_GOV_FIREBASE_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+            messagingSenderId: "YOUR_GOV_MESSAGING_SENDER_ID",
+            appId: "YOUR_GOV_FIREBASE_APP_ID"
+        };
+        
+        window.govFirebaseApp = initializeApp(firebaseConfig);
+        window.govFirebaseAuth = getAuth(window.govFirebaseApp);
+        
+        console.log('%c🔐 Firebase Auth: Initialized', 'color:#22c55e;font-weight:bold');
+        
+        // Check if user is already authenticated
+        onAuthStateChanged(window.govFirebaseAuth, (user) => {
+            if (user && localStorage.getItem('officerInfo')) {
+                console.log('%c✅ Government officer already authenticated:', user.email, 'color:#3b82f6;font-weight:bold');
+            }
+        });
+    </script>
+</head>
+<body class="login-page">
+    <div class="login-shell">
+
+        <!-- Header -->
+        <header class="login-header">
+            <div class="header-content">
+                <div class="login-logo">
+                    <span class="logo-icon"><img src="/avyanpragati.png" alt="Avyan Pragati" style="height:40px;width:40px;object-fit:contain;border-radius:8px;"></span>
+                    <div>
+                        <h1 class="translatable" data-en="Avyan Pragati" data-hi="अव्यान प्रगति">Avyan Pragati</h1>
+                        <p class="translatable" data-en="Government Portal" data-hi="सरकारी पोर्टल">Government Portal</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="language-selector">
+                        <select id="languageToggle" onchange="changeLanguage(this.value)">
+                            <option value="en">English</option>
+                            <option value="hi">हिंदी</option>
+                        </select>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleDarkTheme()" title="Toggle Dark Theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="login-main">
+            <div class="form-container">
+                <!-- Login Form -->
+                <div class="form-wrapper active" id="loginForm">
+                    <div class="form-header">
+                        <h2 class="translatable" data-en="Government Officials Login" data-hi="सरकारी अधिकारियों के लिए लॉगिन">Government Officials Login</h2>
+                        <p class="translatable" data-en="Access your secure government portal" data-hi="अपने सुरक्षित सरकारी पोर्टल तक पहुंचें">Access your secure government portal</p>
+                    </div>
+
+                    <form id="loginFormElement" class="login-form">
+                        <div class="form-group">
+                            <label for="loginID" class="translatable" data-en="Official Government ID" data-hi="सरकारी पहचान पत्र">Official Government ID</label>
+                            <input
+                                type="text"
+                                id="loginID"
+                                name="govId"
+                                class="translatable-placeholder"
+                                placeholder="Enter your Government ID"
+                                data-placeholder-en="Enter your Government ID"
+                                data-placeholder-hi="अपनी सरकारी आईडी दर्ज करें"
+                                required
+                            >
+                            <span class="error-message" id="govIdError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginPassword" class="translatable" data-en="Password" data-hi="पासवर्ड">Password</label>
+                            <div class="password-field">
+                                <input
+                                    type="password"
+                                    id="loginPassword"
+                                    name="password"
+                                    class="translatable-placeholder"
+                                    placeholder="Enter your password"
+                                    data-placeholder-en="Enter your password"
+                                    data-placeholder-hi="अपना पासवर्ड दर्ज करें"
+                                    required
+                                >
+                                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword')">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                            <span class="error-message" id="passwordError"></span>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" name="remember">
+                                <span class="translatable" data-en="Remember me" data-hi="मुझे याद रखें">Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-password translatable" data-en="Forgot Password?" data-hi="पासवर्ड भूल गए?">Forgot Password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-login btn-block translatable" data-en="Sign In" data-hi="साइन इन करें">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <!-- ID Role Preview -->
+                    <div id="idRolePreview" class="id-role-preview" style="display:none;"></div>
+
+                    <div class="support-info">
+                        <p class="translatable" data-en="For support, contact:" data-hi="सहायता के लिए संपर्क करें:">For support, contact:</p>
+                        <p><strong>support@bharatmandapam.gov.in</strong></p>
+                        <p class="translatable" data-en="Toll Free:" data-hi="सहायक केंद्र:"><strong>1800-111-555</strong></p>
+                    </div>
+                </div>
+
+                <!-- ══ DEMO CREDENTIALS PANEL ══════════════════════════ -->
+                <div class="demo-panel-wrapper">
+                    <button class="demo-panel-toggle" id="demoPanelToggle" aria-expanded="false">
+                        <span class="demo-toggle-icon">🔑</span>
+                        <span>Demo Credentials</span>
+                        <span id="demoPanelArrow" class="demo-panel-arrow">▼</span>
+                    </button>
+
+                    <div class="demo-credentials-panel" id="demoCredentialsPanel">
+
+                        <!-- National -->
+                        <div class="demo-tier-section">
+                            <div class="demo-tier-label national-tier">
+                                <span>🇮🇳</span> National Level — All-India Access
+                            </div>
+                            <div class="demo-cards-grid">
+                                <div class="demo-card national-card" onclick="autofillCredentials('AGND123456','admin123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">⭐⭐⭐⭐⭐</span>
+                                        <span class="demo-role-tag national-tag">NATIONAL</span>
+                                    </div>
+                                    <div class="demo-name">Rajesh Kumar, IAS</div>
+                                    <div class="demo-rank">Additional Secretary</div>
+                                    <div class="demo-cred-row"><code>AGND123456</code></div>
+                                    <div class="demo-cred-row"><code>admin123</code></div>
+                                    <div class="demo-scope">🗺️ All India</div>
+                                </div>
+                                <div class="demo-card national-card" onclick="autofillCredentials('JSND654321','admin123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">⭐⭐⭐⭐</span>
+                                        <span class="demo-role-tag national-tag">NATIONAL</span>
+                                    </div>
+                                    <div class="demo-name">Anita Desai, IAS</div>
+                                    <div class="demo-rank">Joint Secretary</div>
+                                    <div class="demo-cred-row"><code>JSND654321</code></div>
+                                    <div class="demo-cred-row"><code>admin123</code></div>
+                                    <div class="demo-scope">🗺️ All India</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- State -->
+                        <div class="demo-tier-section">
+                            <div class="demo-tier-label state-tier">
+                                <span>🏛️</span> State Level — Jurisdiction Filtered
+                            </div>
+                            <div class="demo-cards-grid">
+                                <div class="demo-card state-card" onclick="autofillCredentials('ST-MH-2024-001','State@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🏛️</span>
+                                        <span class="demo-role-tag state-tag">STATE</span>
+                                    </div>
+                                    <div class="demo-name">Priya Sharma, IAS</div>
+                                    <div class="demo-rank">Principal Secretary</div>
+                                    <div class="demo-cred-row"><code>ST-MH-2024-001</code></div>
+                                    <div class="demo-cred-row"><code>State@123</code></div>
+                                    <div class="demo-scope">📍 Maharashtra</div>
+                                </div>
+                                <div class="demo-card state-card" onclick="autofillCredentials('ST-DL-2024-002','State@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🏛️</span>
+                                        <span class="demo-role-tag state-tag">STATE</span>
+                                    </div>
+                                    <div class="demo-name">Arvind Mehta, IAS</div>
+                                    <div class="demo-rank">Chief Secretary</div>
+                                    <div class="demo-cred-row"><code>ST-DL-2024-002</code></div>
+                                    <div class="demo-cred-row"><code>State@123</code></div>
+                                    <div class="demo-scope">📍 Delhi</div>
+                                </div>
+                                <div class="demo-card state-card" onclick="autofillCredentials('ST-KA-2024-003','State@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🏛️</span>
+                                        <span class="demo-role-tag state-tag">STATE</span>
+                                    </div>
+                                    <div class="demo-name">Suresh Nair, IAS</div>
+                                    <div class="demo-rank">Principal Secretary</div>
+                                    <div class="demo-cred-row"><code>ST-KA-2024-003</code></div>
+                                    <div class="demo-cred-row"><code>State@123</code></div>
+                                    <div class="demo-scope">📍 Karnataka</div>
+                                </div>
+                                <div class="demo-card state-card" onclick="autofillCredentials('ST-UP-2024-004','State@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🏛️</span>
+                                        <span class="demo-role-tag state-tag">STATE</span>
+                                    </div>
+                                    <div class="demo-name">Ramesh Tiwari, IAS</div>
+                                    <div class="demo-rank">Principal Secretary</div>
+                                    <div class="demo-cred-row"><code>ST-UP-2024-004</code></div>
+                                    <div class="demo-cred-row"><code>State@123</code></div>
+                                    <div class="demo-scope">📍 Uttar Pradesh</div>
+                                </div>
+                                <div class="demo-card state-card" onclick="autofillCredentials('ST-TG-2024-005','State@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🏛️</span>
+                                        <span class="demo-role-tag state-tag">STATE</span>
+                                    </div>
+                                    <div class="demo-name">Lakshmi Rao, IAS</div>
+                                    <div class="demo-rank">Chief Secretary</div>
+                                    <div class="demo-cred-row"><code>ST-TG-2024-005</code></div>
+                                    <div class="demo-cred-row"><code>State@123</code></div>
+                                    <div class="demo-scope">📍 Telangana</div>
+                                </div>
+                                <div class="demo-card state-card" onclick="autofillCredentials('ST-GJ-2024-006','State@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🏛️</span>
+                                        <span class="demo-role-tag state-tag">STATE</span>
+                                    </div>
+                                    <div class="demo-name">Hardik Patel, IAS</div>
+                                    <div class="demo-rank">Principal Secretary</div>
+                                    <div class="demo-cred-row"><code>ST-GJ-2024-006</code></div>
+                                    <div class="demo-cred-row"><code>State@123</code></div>
+                                    <div class="demo-scope">📍 Gujarat</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- District -->
+                        <div class="demo-tier-section">
+                            <div class="demo-tier-label district-tier">
+                                <span>🎖️</span> District Level — District Filtered
+                            </div>
+                            <div class="demo-cards-grid">
+                                <div class="demo-card district-card" onclick="autofillCredentials('DT-MU-2024-001','Dist@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🎖️</span>
+                                        <span class="demo-role-tag district-tag">DISTRICT</span>
+                                    </div>
+                                    <div class="demo-name">Kavya Reddy, IPS</div>
+                                    <div class="demo-rank">Deputy Commissioner</div>
+                                    <div class="demo-cred-row"><code>DT-MU-2024-001</code></div>
+                                    <div class="demo-cred-row"><code>Dist@123</code></div>
+                                    <div class="demo-scope">📍 Mumbai Suburban, MH</div>
+                                </div>
+                                <div class="demo-card district-card" onclick="autofillCredentials('DT-ND-2024-002','Dist@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🎖️</span>
+                                        <span class="demo-role-tag district-tag">DISTRICT</span>
+                                    </div>
+                                    <div class="demo-name">Rohit Verma, IPS</div>
+                                    <div class="demo-rank">Deputy Commissioner</div>
+                                    <div class="demo-cred-row"><code>DT-ND-2024-002</code></div>
+                                    <div class="demo-cred-row"><code>Dist@123</code></div>
+                                    <div class="demo-scope">📍 New Delhi, DL</div>
+                                </div>
+                                <div class="demo-card district-card" onclick="autofillCredentials('DT-BG-2024-003','Dist@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🎖️</span>
+                                        <span class="demo-role-tag district-tag">DISTRICT</span>
+                                    </div>
+                                    <div class="demo-name">Ananya Krishnan, IAS</div>
+                                    <div class="demo-rank">Deputy Commissioner</div>
+                                    <div class="demo-cred-row"><code>DT-BG-2024-003</code></div>
+                                    <div class="demo-cred-row"><code>Dist@123</code></div>
+                                    <div class="demo-scope">📍 Bengaluru Urban, KA</div>
+                                </div>
+                                <div class="demo-card district-card" onclick="autofillCredentials('DT-HY-2024-004','Dist@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🎖️</span>
+                                        <span class="demo-role-tag district-tag">DISTRICT</span>
+                                    </div>
+                                    <div class="demo-name">Vikram Rao, IPS</div>
+                                    <div class="demo-rank">Deputy Commissioner</div>
+                                    <div class="demo-cred-row"><code>DT-HY-2024-004</code></div>
+                                    <div class="demo-cred-row"><code>Dist@123</code></div>
+                                    <div class="demo-scope">📍 Hyderabad, TG</div>
+                                </div>
+                                <div class="demo-card district-card" onclick="autofillCredentials('DT-PU-2024-005','Dist@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🎖️</span>
+                                        <span class="demo-role-tag district-tag">DISTRICT</span>
+                                    </div>
+                                    <div class="demo-name">Sneha Patil, IPS</div>
+                                    <div class="demo-rank">Deputy Commissioner</div>
+                                    <div class="demo-cred-row"><code>DT-PU-2024-005</code></div>
+                                    <div class="demo-cred-row"><code>Dist@123</code></div>
+                                    <div class="demo-scope">📍 Pune, MH</div>
+                                </div>
+                                <div class="demo-card district-card" onclick="autofillCredentials('DT-BH-2024-007','Dist@123')">
+                                    <div class="demo-card-header">
+                                        <span class="demo-badge">🎖️</span>
+                                        <span class="demo-role-tag district-tag">DISTRICT</span>
+                                    </div>
+                                    <div class="demo-name">Neha Shukla, IPS</div>
+                                    <div class="demo-rank">Assistant Commissioner</div>
+                                    <div class="demo-cred-row"><code>DT-BH-2024-007</code></div>
+                                    <div class="demo-cred-row"><code>Dist@123</code></div>
+                                    <div class="demo-scope">📍 Bhopal, MP</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="demo-hint">⚡ Click any card to auto-fill credentials</p>
+                    </div>
+                </div>
+                <!-- ══ /DEMO PANEL ══════════════════════════════════════ -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="login-footer">
+            <div class="footer-support-info">
+                <p class="translatable" data-en="For support, contact:" data-hi="सहायता के लिए संपर्क करें:">For support, contact:</p>
+                <p><strong>support@bharatmandapam.gov.in</strong></p>
+                <p class="translatable" data-en="Toll Free:" data-hi="सहायक केंद्र:">Toll Free:</p>
+                <p><strong>1800-111-555</strong></p>
+            </div>
+            <div class="footer-bottom">
+                <p class="translatable" data-en="&copy; 2026 Avyan Pragati - Government of India | All Rights Reserved" data-hi="&copy; 2026 अव्यान प्रगति - भारत सरकार | सर्वाधिकार सुरक्षित">&copy; 2026 Avyan Pragati - Government of India | All Rights Reserved</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/Gov/assets/js/utils.js?v=202603081547"></script>
+    <script src="/Gov/assets/js/login.js?v=202603081547"></script>
+</body>
+</html>

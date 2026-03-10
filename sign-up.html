@@ -1,0 +1,1460 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Avyan Pragati</title>
+    <link rel="icon" type="image/png" href="avyanpragati.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --saffron: #FF9933;
+            --india-green: #138808;
+            --india-blue: #0052CC;
+            --india-navy: #001A4D;
+            --bg: #ffffff;
+            --bg-alt: #f5f5f5;
+            --bg-light: #fafafa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border: #e0e0e0;
+            --border-light: #f0f0f0;
+            --accent: #FF9933;
+            --error: #DC2626;
+            --success: #16A34A;
+            --warning: #EA580C;
+            --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --bg-alt: #1a2332;
+            --bg-light: #2d3748;
+            --text-primary: #f5f5f5;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --border-light: #475569;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        
+        header {
+            background: var(--bg);
+            border-bottom: 1px solid var(--border-light);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        header.scrolled {
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand i {
+            color: var(--saffron);
+        }
+
+        .tagline {
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.25s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-alt);
+        }
+
+        
+        .main-container {
+            max-width: 680px;
+            margin: 40px auto;
+            padding: 0 24px;
+            min-height: calc(100vh - 200px);
+        }
+
+        
+        .signup-card {
+            background: var(--bg);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 48px 40px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .signup-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--saffron), #FF6B00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .signup-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            gap: 12px;
+        }
+
+        .step {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-alt);
+            border: 2.5px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step.active .step-circle {
+            background: linear-gradient(135deg, var(--saffron), #FF6B00);
+            border-color: var(--saffron);
+            color: white;
+            box-shadow: 0 4px 16px rgba(255, 153, 51, 0.4);
+            transform: scale(1.1);
+        }
+
+        .step.completed .step-circle {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        @media (min-width: 600px) {
+            .step-label {
+                display: block;
+            }
+        }
+
+        
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: slideIn 0.3s var(--ease-out);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .step-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .required {
+            color: var(--error);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            background: var(--bg);
+            color: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--saffron);
+            box-shadow: 0 0 0 4px rgba(255, 153, 51, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .form-group input:hover,
+        .form-group select:hover,
+        .form-group textarea:hover {
+            border-color: var(--text-muted);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        
+        .helper-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        
+        .button-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: var(--font-sans);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-back {
+            background: var(--bg-alt);
+            color: var(--text-primary);
+            border: 1.5px solid var(--border);
+            flex: 1;
+        }
+
+        .btn-back:hover {
+            background: var(--border-light);
+        }
+
+        .btn-next,
+        .btn-submit {
+            background: linear-gradient(135deg, var(--saffron), #FF6B00);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-next:hover,
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #FF7F1F, #E65100);
+            box-shadow: 0 6px 20px rgba(255, 153, 51, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-next:active,
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(255, 153, 51, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            border-top: 1px solid var(--border-light);
+            margin-top: 40px;
+        }
+
+        footer a {
+            color: var(--saffron);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        
+        .success-message {
+            text-align: center;
+            padding: 48px 24px;
+        }
+
+        .success-icon {
+            font-size: 72px;
+            color: var(--success);
+            margin-bottom: 24px;
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-message h2 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .success-message p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .btn-go-login {
+            background: linear-gradient(135deg, var(--india-blue), var(--india-navy));
+            color: white;
+            padding: 14px 36px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-go-login:hover {
+            background: linear-gradient(135deg, var(--india-navy), #000D2B);
+            box-shadow: 0 6px 20px rgba(0, 52, 204, 0.4);
+            transform: translateY(-2px);
+        }
+
+        
+        .toggle-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .toggle-option {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .toggle-option.active {
+            background: linear-gradient(135deg, var(--saffron), #FF6B00);
+            border-color: var(--saffron);
+            color: white;
+            box-shadow: 0 4px 16px rgba(255, 153, 51, 0.4);
+            transform: scale(1.02);
+        }
+
+        .toggle-option:hover {
+            border-color: var(--saffron);
+        }
+
+        
+        .error-message {
+            background: rgba(220, 38, 38, 0.08);
+            color: var(--error);
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .error-message.show {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-message::before {
+            content: '\f071';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        
+        [data-theme="dark"] .signup-card {
+            background: rgba(26, 35, 50, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+        }
+
+        
+        .main-container {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input {
+            padding-left: 44px;
+        }
+
+        .input-with-icon .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-alt);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--saffron);
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checkbox-wrapper label {
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    
+    <header id="header">
+        <div class="header-container">
+            <div class="logo-text">
+                <span class="brand"><img src="avyanpragati.png" alt="Avyan Pragati" style="height:28px;width:28px;object-fit:contain;vertical-align:middle;border-radius:4px;">&nbsp; Avyan Pragati</span>
+                <span class="tagline">Citizen Registration Portal</span>
+            </div>
+            <div class="header-right">
+                <button id="theme-toggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    
+    <div class="main-container">
+        <div class="signup-card">
+            
+            <div class="progress-steps">
+                <div class="step active" id="step-1-progress">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Aadhaar</div>
+                </div>
+                <div class="step" id="step-2-progress">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Personal</div>
+                </div>
+                <div class="step" id="step-3-progress">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Address</div>
+                </div>
+                <div class="step" id="step-4-progress">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Profession</div>
+                </div>
+            </div>
+
+            
+            <form id="signup-form" novalidate>
+                <div class="form-step active" id="step-1">
+                    <div class="signup-header">
+                        <h1>Verify with Aadhaar</h1>
+                        <p>Start your digital journey with Avyan Pragati</p>
+                    </div>
+
+                    <div class="error-message" id="error-step1"></div>
+
+                    <div class="step-title">Step 1: Basic Information</div>
+                    <div class="step-subtitle">Enter your Aadhaar number and full name to begin registration</div>
+
+                    <div class="toggle-group">
+                        <button type="button" class="toggle-option active" data-method="aadhaar">📱 Aadhaar</button>
+                        <button type="button" class="toggle-option" data-method="name">👤 Name</button>
+                    </div>
+
+                    <div id="aadhaar-method">
+                        <div class="form-group">
+                            <label>Aadhaar Number <span class="required">*</span></label>
+                            <input type="text" id="aadhaar" placeholder="Enter 12-digit Aadhaar number" maxlength="12" pattern="\d{12}">
+                            <div class="helper-text">Will be used to fetch your registered details from UIDAI database</div>
+                        </div>
+                    </div>
+
+                    <div id="name-method" style="display: none;">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" id="name-basic" placeholder="Enter your full name" required>
+                            <div class="helper-text">As per government records</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="full-name" placeholder="Enter your full name as per Aadhaar" required style="padding-left: 44px;">
+                        </div>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="button" class="btn btn-next" id="btn-next-1">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                
+                <div class="form-step" id="step-2">
+                    <div class="step-title">Step 2: Personal Details</div>
+                    <div class="step-subtitle">Share your personal information (can be auto-filled from Aadhaar/DigiLocker)</div>
+
+                    <div class="error-message" id="error-step2"></div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date of Birth <span class="required">*</span></label>
+                            <input type="date" id="dob" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender <span class="required">*</span></label>
+                            <select id="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Number <span class="required">*</span></label>
+                        <input type="tel" id="mobile" placeholder="+91 XXXXX XXXXX" maxlength="10" pattern="\d{10}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nationality <span class="required">*</span></label>
+                        <select id="nationality" required>
+                            <option value="">Select Nationality</option>
+                            <option value="Indian" selected>Indian</option>
+                            <option value="NRI">NRI (Non-Resident Indian)</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Create Password <span class="required">*</span></label>
+                        <input type="password" id="password" placeholder="Create a strong password" required minlength="6">
+                        <div class="helper-text">At least 6 characters required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password <span class="required">*</span></label>
+                        <input type="password" id="confirm-password" placeholder="Re-enter your password" required>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="button" class="btn btn-back" id="btn-back-2">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="button" class="btn btn-next" id="btn-next-2">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                
+                <div class="form-step" id="step-3">
+                    <div class="step-title">Step 3: Address Details</div>
+                    <div class="step-subtitle">Enter your residential address (auto-filled from Aadhaar records)</div>
+
+                    <div class="error-message" id="error-step3"></div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>State <span class="required">*</span></label>
+                            <select id="state" required>
+                                <option value="">Select State / UT</option>
+                                <optgroup label="── States ──" disabled></optgroup>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <optgroup label="── Union Territories ──" disabled></optgroup>
+                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                <option value="Ladakh">Ladakh</option>
+                                <option value="Lakshadweep">Lakshadweep</option>
+                                <option value="Puducherry">Puducherry</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>District <span class="required">*</span></label>
+                            <select id="district" required disabled>
+                                <option value="">Select State first</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>House No./Building Name <span class="required">*</span></label>
+                        <input type="text" id="house-number" placeholder="E.g., 123-A, Apartment 45" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Street/Road Name <span class="required">*</span></label>
+                        <input type="text" id="street" placeholder="E.g., Main Road, Park Lane" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Village/City <span class="required">*</span></label>
+                        <input type="text" id="city" placeholder="Enter village or city name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Postal Code <span class="required">*</span></label>
+                            <input type="text" id="pincode" placeholder="6-digit PIN code" maxlength="6" pattern="\d{6}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Landmark (Optional)</label>
+                            <input type="text" id="landmark" placeholder="E.g., near school, hospital">
+                        </div>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="button" class="btn btn-back" id="btn-back-3">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="button" class="btn btn-next" id="btn-next-3">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                
+                <div class="form-step" id="step-4">
+                    <div class="step-title">Step 4: Profession & Employment</div>
+                    <div class="step-subtitle">Tell us about your professional background (helps in scheme recommendations)</div>
+
+                    <div class="error-message" id="error-step4"></div>
+
+                    <div class="form-group">
+                        <label>Employment Status <span class="required">*</span></label>
+                        <select id="employment-status" required>
+                            <option value="">Select Status</option>
+                            <option value="Employed - Government">Employed - Government</option>
+                            <option value="Employed - Private">Employed - Private</option>
+                            <option value="Self-Employed">Self-Employed</option>
+                            <option value="Student">Student</option>
+                            <option value="Unemployed">Unemployed</option>
+                            <option value="Retired">Retired</option>
+                            <option value="Homemaker">Homemaker</option>
+                            <option value="Farmer">Farmer</option>
+                            <option value="Laborer">Laborer</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="profession-field">
+                        <label>Profession/Occupation <span class="required">*</span></label>
+                        <input type="text" id="profession" placeholder="E.g., Engineer, Teacher, Shopkeeper" required>
+                    </div>
+
+                    <div class="form-group" id="industry-field" style="display: none;">
+                        <label>Industry Sector <span class="required">*</span></label>
+                        <select id="industry">
+                            <option value="">Select Industry</option>
+                            <option value="IT/Software">IT/Software</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                            <option value="Agriculture">Agriculture</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Retail">Retail/Trade</option>
+                            <option value="Finance">Finance/Banking</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Media">Media/Entertainment</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="experience-field" style="display: none;">
+                        <label>Years of Experience</label>
+                        <input type="number" id="experience" placeholder="E.g., 5" min="0" max="70">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Annual Income Range (Optional)</label>
+                        <select id="income-range">
+                            <option value="">Select Range</option>
+                            <option value="Below 1 Lakh">Below ₹1 Lakh</option>
+                            <option value="1-3 Lakh">₹1 - 3 Lakh</option>
+                            <option value="3-5 Lakh">₹3 - 5 Lakh</option>
+                            <option value="5-10 Lakh">₹5 - 10 Lakh</option>
+                            <option value="10-25 Lakh">₹10 - 25 Lakh</option>
+                            <option value="25-50 Lakh">₹25 - 50 Lakh</option>
+                            <option value="50+ Lakh">₹50+ Lakh</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    
+                    <div style="margin: 32px 0; padding: 20px; background: linear-gradient(135deg, rgba(255,153,51,0.05) 0%, rgba(19,136,8,0.05) 100%); border-radius: 12px; border-left: 4px solid var(--saffron);">
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-gift" style="color: var(--saffron);"></i>
+                            Get Personalized Government Schemes
+                        </h4>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+                            Help us show you relevant scholarships, subsidies, and welfare programs based on your profile
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Age Group <span class="required">*</span></label>
+                        <select id="age-group" required>
+                            <option value="">Select Age Group</option>
+                            <option value="18-25">18-25 years (Youth)</option>
+                            <option value="26-40">26-40 years (Adults)</option>
+                            <option value="41-60">41-60 years (Middle Age)</option>
+                            <option value="60+">60+ years (Senior Citizen)</option>
+                        </select>
+                        <div class="helper-text">Some schemes are age-specific (student programs, senior benefits, etc.)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Highest Education Level <span class="required">*</span></label>
+                        <select id="education-level" required>
+                            <option value="">Select Education Level</option>
+                            <option value="below-10th">Below 10th Standard</option>
+                            <option value="10th-12th">10th-12th Standard</option>
+                            <option value="graduate">Graduate (Bachelor's Degree)</option>
+                            <option value="postgraduate">Post-Graduate (Master's/PhD)</option>
+                            <option value="diploma">Diploma/Certificate</option>
+                            <option value="other">Other/Non-formal Education</option>
+                        </select>
+                        <div class="helper-text">Helps us match you with relevant scholarships and skill programs</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Person with Disability (PWD)</label>
+                        <select id="disability-status">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                        <div class="helper-text">PWD-specific schemes and benefits are available</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Belong to Minority Community</label>
+                        <select id="minority-status">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                        <div class="helper-text">For minority welfare schemes and educational programs</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><input type="checkbox" id="terms-agree" required style="margin-right: 10px; cursor: pointer; width: 18px; height: 18px; accent-color: #FF9933;"> I agree to the <a href="#" style="color: var(--saffron);">terms and conditions</a> and <a href="#" style="color: var(--saffron);">data usage policy</a></label>
+                        <div class="helper-text">Your information will be securely stored and used only for government service delivery</div>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="button" class="btn btn-back" id="btn-back-4">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-submit">
+                            <i class="fas fa-check-circle"></i> Complete Registration
+                        </button>
+                    </div>
+                </div>
+
+                
+                <div class="form-step" id="step-success">
+                    <div class="success-message">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2>Registration Successful!</h2>
+                        <p>Welcome to Avyan Pragati, <span id="success-name"></span>!</p>
+                        <p style="font-size: 14px; margin-bottom: 30px;">Your profile has been created successfully. You can now login from the main website to access personalized government services and schemes.</p>
+                        <button class="btn btn-go-login" onclick="window.location.href='Main website.html'">
+                            <i class="fas fa-home"></i> Go to Website
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <footer>
+        <p>&copy; 2026 Avyan Pragati - Government of India. All rights reserved.</p>
+        <p>Your data is secure and encrypted | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <script type="module">
+        import { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, doc, setDoc, getDoc } from './firebase-config.js';
+
+        function showSignupError(msg) {
+            const el = document.getElementById('error-step4');
+            if (el) {
+                el.textContent = msg;
+                el.style.display = 'block';
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                alert(msg);
+            }
+        }
+        function clearSignupError() {
+            const el = document.getElementById('error-step4');
+            if (el) { el.textContent = ''; el.style.display = 'none'; }
+        }
+        
+        let currentStep = 1;
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const themeText = themeToggle.querySelector('span');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        if (currentTheme === 'dark') {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+            themeText.textContent = 'Light';
+        }
+
+        themeToggle.addEventListener('click', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = 'Light';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeText.textContent = 'Dark';
+            }
+        });
+
+        document.querySelectorAll('[data-method]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('[data-method]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const method = this.dataset.method;
+                if (method === 'aadhaar') {
+                    document.getElementById('aadhaar-method').style.display = 'block';
+                    document.getElementById('name-method').style.display = 'none';
+                    document.getElementById('aadhaar').removeAttribute('required');
+                    document.getElementById('name-basic').removeAttribute('required');
+                } else {
+                    document.getElementById('aadhaar-method').style.display = 'none';
+                    document.getElementById('name-method').style.display = 'block';
+                    document.getElementById('name-basic').setAttribute('required', '');
+                    document.getElementById('aadhaar').removeAttribute('required');
+                }
+            });
+        });
+
+        function goToStep(stepNumber) {
+            if (validateStep(currentStep)) {
+                currentStep = stepNumber;
+                updateStepDisplay();
+            }
+        }
+
+        function validateStep(stepNum) {
+            const errorDiv = document.getElementById(`error-step${stepNum}`);
+            errorDiv.classList.remove('show');
+
+            let isValid = true;
+            let errorMsg = '';
+
+            if (stepNum === 1) {
+                const fullName = document.getElementById('full-name').value.trim();
+                if (!fullName) {
+                    isValid = false;
+                    errorMsg = 'Please enter your full name';
+                }
+            } else if (stepNum === 2) {
+                const dob = document.getElementById('dob').value;
+                const email = document.getElementById('email').value;
+                const mobile = document.getElementById('mobile').value;
+                const gender = document.getElementById('gender').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                if (!dob || !email || !mobile || !gender || !password || !confirmPassword) {
+                    isValid = false;
+                    errorMsg = 'Please fill all required fields';
+                } else if (password.length < 6) {
+                    isValid = false;
+                    errorMsg = 'Password must be at least 6 characters long';
+                } else if (password !== confirmPassword) {
+                    isValid = false;
+                    errorMsg = 'Passwords do not match';
+                }
+            } else if (stepNum === 3) {
+                const state = document.getElementById('state').value;
+                const district = document.getElementById('district').value;
+                const house = document.getElementById('house-number').value;
+                const street = document.getElementById('street').value;
+                const city = document.getElementById('city').value;
+                const pincode = document.getElementById('pincode').value;
+
+                if (!state || !district || !house || !street || !city || !pincode) {
+                    isValid = false;
+                    errorMsg = 'Please fill all required address fields';
+                }
+            } else if (stepNum === 4) {
+                const employmentStatus = document.getElementById('employment-status').value;
+                const profession = document.getElementById('profession').value;
+                const termsAgree = document.getElementById('terms-agree').checked;
+
+                if (!employmentStatus || !profession || !termsAgree) {
+                    isValid = false;
+                    errorMsg = 'Please fill all fields and agree to terms';
+                }
+            }
+
+            if (!isValid) {
+                errorDiv.textContent = errorMsg;
+                errorDiv.classList.add('show');
+            }
+
+            return isValid;
+        }
+
+        function updateStepDisplay() {
+            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active', 'completed'));
+
+            if (currentStep <= 4) {
+                document.getElementById(`step-${currentStep}`).classList.add('active');
+
+                for (let i = 1; i < currentStep; i++) {
+                    document.getElementById(`step-${i}-progress`).classList.add('completed');
+                }
+                document.getElementById(`step-${currentStep}-progress`).classList.add('active');
+            } else {
+                document.getElementById('step-success').classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProfessionFields() {
+            const status = document.getElementById('employment-status').value;
+            const professionField = document.getElementById('profession-field');
+            const industryField = document.getElementById('industry-field');
+            const experienceField = document.getElementById('experience-field');
+
+            professionField.style.display = 'block';
+
+            if (status === 'Employed - Private' || status === 'Employed - Government') {
+                industryField.style.display = 'block';
+                experienceField.style.display = 'block';
+            } else {
+                industryField.style.display = 'none';
+                experienceField.style.display = 'none';
+            }
+        }
+
+        const districtsByState = {
+            'Andhra Pradesh': ['Alluri Sitharama Raju','Anakapalli','Anantapur','Bapatla','Chittoor','Dr. B.R. Ambedkar Konaseema','East Godavari','Eluru','Guntur','Kakinada','Krishna','Kurnool','Nandyal','NTR','Palnadu','Parvathipuram Manyam','Prakasam','Srikakulam','Sri Potti Sriramulu Nellore','Tirupati','Visakhapatnam','Vizianagaram','West Godavari','YSR Kadapa'],
+            'Arunachal Pradesh': ['Anjaw','Changlang','Dibang Valley','East Kameng','East Siang','Kamle','Kra Daadi','Kurung Kumey','Lepa Rada','Lohit','Longding','Lower Dibang Valley','Lower Siang','Lower Subansiri','Namsai','Pakke Kessang','Papum Pare','Shi Yomi','Siang','Tawang','Tirap','Upper Siang','Upper Subansiri','West Kameng','West Siang'],
+            'Assam': ['Bajali','Barpeta','Biswanath','Bongaigaon','Cachar','Charaideo','Chirang','Darrang','Dhemaji','Dhubri','Dibrugarh','Dima Hasao','Goalpara','Golaghat','Hailakandi','Hojai','Jorhat','Kamrup','Kamrup Metropolitan','Karbi Anglong','Karimganj','Kokrajhar','Lakhimpur','Majuli','Morigaon','Nagaon','Nalbari','Sivasagar','Sonitpur','South Salmara-Mankachar','Tinsukia','Udalguri','West Karbi Anglong'],
+            'Bihar': ['Araria','Arwal','Aurangabad','Banka','Begusarai','Bhagalpur','Bhojpur','Buxar','Darbhanga','East Champaran','Gaya','Gopalganj','Jamui','Jehanabad','Kaimur','Katihar','Khagaria','Kishanganj','Lakhisarai','Madhepura','Madhubani','Munger','Muzaffarpur','Nalanda','Nawada','Patna','Purnia','Rohtas','Saharsa','Samastipur','Saran','Sheikhpura','Sheohar','Sitamarhi','Siwan','Supaul','Vaishali','West Champaran'],
+            'Chhattisgarh': ['Balod','Baloda Bazar','Balrampur','Bastar','Bemetara','Bijapur','Bilaspur','Dantewada','Dhamtari','Durg','Gariaband','Gaurela Pendra Marwahi','Janjgir Champa','Jashpur','Kabirdham','Kanker','Khairagarh','Kondagaon','Korba','Koriya','Mahasamund','Manendragarh','Mohla Manpur','Mungeli','Narayanpur','Raigarh','Raipur','Rajnandgaon','Sakti','Sarangarh Bilaigarh','Sukma','Surajpur','Surguja'],
+            'Goa': ['North Goa','South Goa'],
+            'Gujarat': ['Ahmedabad','Amreli','Anand','Aravalli','Banaskantha','Bharuch','Bhavnagar','Botad','Chhota Udaipur','Dahod','Dang','Devbhoomi Dwarka','Gandhinagar','Gir Somnath','Jamnagar','Junagadh','Kheda','Kutch','Mahisagar','Mehsana','Morbi','Narmada','Navsari','Panchmahal','Patan','Porbandar','Rajkot','Sabarkantha','Surat','Surendranagar','Tapi','Vadodara','Valsad'],
+            'Haryana': ['Ambala','Bhiwani','Charkhi Dadri','Faridabad','Fatehabad','Gurugram','Hisar','Jhajjar','Jind','Kaithal','Karnal','Kurukshetra','Mahendragarh','Nuh','Palwal','Panchkula','Panipat','Rewari','Rohtak','Sirsa','Sonipat','Yamunanagar'],
+            'Himachal Pradesh': ['Bilaspur','Chamba','Hamirpur','Kangra','Kinnaur','Kullu','Lahaul Spiti','Mandi','Shimla','Sirmaur','Solan','Una'],
+            'Jharkhand': ['Bokaro','Chatra','Deoghar','Dhanbad','Dumka','East Singhbhum','Garhwa','Giridih','Godda','Gumla','Hazaribagh','Jamtara','Khunti','Koderma','Latehar','Lohardaga','Pakur','Palamu','Ramgarh','Ranchi','Sahebganj','Seraikela Kharsawan','Simdega','West Singhbhum'],
+            'Karnataka': ['Bagalkot','Ballari','Belagavi','Bengaluru Rural','Bengaluru Urban','Bidar','Chamarajanagar','Chikballapur','Chikkamagaluru','Chitradurga','Dakshina Kannada','Davangere','Dharwad','Gadag','Hassan','Haveri','Kalaburagi','Kodagu','Kolar','Koppal','Mandya','Mysuru','Raichur','Ramanagara','Shivamogga','Tumakuru','Udupi','Uttara Kannada','Vijayapura','Yadgir'],
+            'Kerala': ['Alappuzha','Ernakulam','Idukki','Kannur','Kasaragod','Kollam','Kottayam','Kozhikode','Malappuram','Palakkad','Pathanamthitta','Thiruvananthapuram','Thrissur','Wayanad'],
+            'Madhya Pradesh': ['Agar Malwa','Alirajpur','Anuppur','Ashoknagar','Balaghat','Barwani','Betul','Bhind','Bhopal','Burhanpur','Chhatarpur','Chhindwara','Damoh','Datia','Dewas','Dhar','Dindori','Guna','Gwalior','Harda','Hoshangabad','Indore','Jabalpur','Jhabua','Katni','Khandwa','Khargone','Mandla','Mandsaur','Morena','Narsinghpur','Neemuch','Niwari','Panna','Raisen','Rajgarh','Ratlam','Rewa','Sagar','Satna','Sehore','Seoni','Shahdol','Shajapur','Sheopur','Shivpuri','Sidhi','Singrauli','Tikamgarh','Ujjain','Umaria','Vidisha'],
+            'Maharashtra': ['Ahmednagar','Akola','Amravati','Aurangabad','Beed','Bhandara','Buldhana','Chandrapur','Dhule','Gadchiroli','Gondia','Hingoli','Jalgaon','Jalna','Kolhapur','Latur','Mumbai City','Mumbai Suburban','Nagpur','Nanded','Nandurbar','Nashik','Osmanabad','Palghar','Parbhani','Pune','Raigad','Ratnagiri','Sangli','Satara','Sindhudurg','Solapur','Thane','Wardha','Washim','Yavatmal'],
+            'Manipur': ['Bishnupur','Chandel','Churachandpur','Imphal East','Imphal West','Jiribam','Kakching','Kamjong','Kangpokpi','Noney','Pherzawl','Senapati','Tamenglong','Tengnoupal','Thoubal','Ukhrul'],
+            'Meghalaya': ['East Garo Hills','East Jaintia Hills','East Khasi Hills','Eastern West Khasi Hills','North Garo Hills','Ri Bhoi','South Garo Hills','South West Garo Hills','South West Khasi Hills','West Garo Hills','West Jaintia Hills','West Khasi Hills'],
+            'Mizoram': ['Aizawl','Champhai','Hnahthial','Khawzawl','Kolasib','Lawngtlai','Lunglei','Mamit','Saiha','Saitual','Serchhip'],
+            'Nagaland': ['Chumoukedima','Dimapur','Kiphire','Kohima','Longleng','Mokokchung','Mon','Niuland','Noklak','Peren','Phek','Tseminyu','Tuensang','Wokha','Zunheboto'],
+            'Odisha': ['Angul','Balangir','Balasore','Bargarh','Bhadrak','Boudh','Cuttack','Deogarh','Dhenkanal','Gajapati','Ganjam','Jagatsinghpur','Jajpur','Jharsuguda','Kalahandi','Kandhamal','Kendrapara','Kendujhar','Khordha','Koraput','Malkangiri','Mayurbhanj','Nabarangpur','Nayagarh','Nuapada','Puri','Rayagada','Sambalpur','Subarnapur','Sundargarh'],
+            'Punjab': ['Amritsar','Barnala','Bathinda','Faridkot','Fatehgarh Sahib','Fazilka','Ferozepur','Gurdaspur','Hoshiarpur','Jalandhar','Kapurthala','Ludhiana','Malerkotla','Mansa','Moga','Mohali','Muktsar','Pathankot','Patiala','Rupnagar','Sangrur','Shaheed Bhagat Singh Nagar','Tarn Taran'],
+            'Rajasthan': ['Ajmer','Alwar','Banswara','Baran','Barmer','Bharatpur','Bhilwara','Bikaner','Bundi','Chittorgarh','Churu','Dausa','Dholpur','Dungarpur','Hanumangarh','Jaipur','Jaisalmer','Jalore','Jhalawar','Jhunjhunu','Jodhpur','Karauli','Kota','Nagaur','Pali','Pratapgarh','Rajsamand','Sawai Madhopur','Sikar','Sirohi','Sri Ganganagar','Tonk','Udaipur'],
+            'Sikkim': ['East Sikkim','North Sikkim','Pakyong','Soreng','South Sikkim','West Sikkim'],
+            'Tamil Nadu': ['Ariyalur','Chengalpattu','Chennai','Coimbatore','Cuddalore','Dharmapuri','Dindigul','Erode','Kallakurichi','Kancheepuram','Kanyakumari','Karur','Krishnagiri','Madurai','Mayiladuthurai','Nagapattinam','Namakkal','Nilgiris','Perambalur','Pudukkottai','Ramanathapuram','Ranipet','Salem','Sivaganga','Tenkasi','Thanjavur','Theni','Thoothukudi','Tiruchirappalli','Tirunelveli','Tirupathur','Tiruppur','Tiruvallur','Tiruvannamalai','Tiruvarur','Vellore','Villupuram','Virudhunagar'],
+            'Telangana': ['Adilabad','Bhadradri Kothagudem','Hanumakonda','Hyderabad','Jagtial','Jangaon','Jayashankar Bhupalpally','Jogulamba Gadwal','Kamareddy','Karimnagar','Khammam','Komaram Bheem','Mahabubabad','Mahabubnagar','Mancherial','Medak','Medchal Malkajgiri','Mulugu','Nagarkurnool','Nalgonda','Narayanpet','Nirmal','Nizamabad','Peddapalli','Rajanna Sircilla','Rangareddy','Sangareddy','Siddipet','Suryapet','Vikarabad','Wanaparthy','Warangal','Yadadri Bhuvanagiri'],
+            'Tripura': ['Dhalai','Gomati','Khowai','North Tripura','Sipahijala','South Tripura','Unakoti','West Tripura'],
+            'Uttar Pradesh': ['Agra','Aligarh','Ambedkar Nagar','Amethi','Amroha','Auraiya','Ayodhya','Azamgarh','Baghpat','Bahraich','Ballia','Balrampur','Banda','Barabanki','Bareilly','Basti','Bhadohi','Bijnor','Budaun','Bulandshahr','Chandauli','Chitrakoot','Deoria','Etah','Etawah','Farrukhabad','Fatehpur','Firozabad','Gautam Buddha Nagar','Ghaziabad','Ghazipur','Gonda','Gorakhpur','Hamirpur','Hapur','Hardoi','Hathras','Jalaun','Jaunpur','Jhansi','Kannauj','Kanpur Dehat','Kanpur Nagar','Kasganj','Kaushambi','Kheri','Kushinagar','Lalitpur','Lucknow','Maharajganj','Mahoba','Mainpuri','Mathura','Mau','Meerut','Mirzapur','Moradabad','Muzaffarnagar','Pilibhit','Pratapgarh','Prayagraj','Raebareli','Rampur','Saharanpur','Sambhal','Sant Kabir Nagar','Shahjahanpur','Shamli','Shravasti','Siddharthnagar','Sitapur','Sonbhadra','Sultanpur','Unnao','Varanasi'],
+            'Uttarakhand': ['Almora','Bageshwar','Chamoli','Champawat','Dehradun','Haridwar','Nainital','Pauri Garhwal','Pithoragarh','Rudraprayag','Tehri Garhwal','Udham Singh Nagar','Uttarkashi'],
+            'West Bengal': ['Alipurduar','Bankura','Birbhum','Cooch Behar','Dakshin Dinajpur','Darjeeling','Hooghly','Howrah','Jalpaiguri','Jhargram','Kalimpong','Kolkata','Malda','Murshidabad','Nadia','North 24 Parganas','Paschim Bardhaman','Paschim Medinipur','Purba Bardhaman','Purba Medinipur','Purulia','South 24 Parganas','Uttar Dinajpur'],
+            'Andaman and Nicobar Islands': ['Nicobar','North and Middle Andaman','South Andaman'],
+            'Chandigarh': ['Chandigarh'],
+            'Dadra and Nagar Haveli and Daman and Diu': ['Dadra and Nagar Haveli','Daman','Diu'],
+            'Delhi': ['Central Delhi','East Delhi','New Delhi','North Delhi','North East Delhi','North West Delhi','Shahdara','South Delhi','South East Delhi','South West Delhi','West Delhi'],
+            'Jammu and Kashmir': ['Anantnag','Bandipora','Baramulla','Budgam','Doda','Ganderbal','Jammu','Kathua','Kishtwar','Kulgam','Kupwara','Poonch','Pulwama','Rajouri','Ramban','Reasi','Samba','Shopian','Srinagar','Udhampur'],
+            'Ladakh': ['Kargil','Leh'],
+            'Lakshadweep': ['Lakshadweep'],
+            'Puducherry': ['Karaikal','Mahe','Puducherry','Yanam']
+        };
+
+        function updateDistricts() {
+            const stateSelect = document.getElementById('state');
+            const districtSelect = document.getElementById('district');
+            const selectedState = stateSelect.value;
+
+            districtSelect.innerHTML = '';
+
+            if (!selectedState || !districtsByState[selectedState]) {
+                districtSelect.innerHTML = '<option value="">Select State first</option>';
+                districtSelect.disabled = true;
+                return;
+            }
+
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.textContent = 'Select District';
+            districtSelect.appendChild(defaultOpt);
+
+            districtsByState[selectedState].forEach(function(district) {
+                const opt = document.createElement('option');
+                opt.value = district;
+                opt.textContent = district;
+                districtSelect.appendChild(opt);
+            });
+
+            districtSelect.disabled = false;
+        }
+
+        document.getElementById('signup-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearSignupError();
+
+            if (!validateStep(4)) return;
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Creating account…'; }
+
+            const fullName        = document.getElementById('full-name').value.trim();
+            const dob             = document.getElementById('dob').value;
+            const gender          = document.getElementById('gender').value;
+            const email           = document.getElementById('email').value.trim();
+            const mobile          = document.getElementById('mobile').value.trim();
+            const password        = document.getElementById('password').value;
+            const nationality     = document.getElementById('nationality').value;
+            const state           = document.getElementById('state').value;
+            const district        = document.getElementById('district').value;
+            const houseNumber     = document.getElementById('house-number').value;
+            const street          = document.getElementById('street').value;
+            const city            = document.getElementById('city').value;
+            const pincode         = document.getElementById('pincode').value;
+            const landmark        = document.getElementById('landmark').value;
+            const employmentStatus = document.getElementById('employment-status').value;
+            const profession      = document.getElementById('profession').value;
+            const industry        = document.getElementById('industry').value;
+            const experience      = document.getElementById('experience').value;
+            const incomeRange     = document.getElementById('income-range').value;
+            const ageGroup        = document.getElementById('age-group').value;
+            const educationLevel  = document.getElementById('education-level').value;
+            const disabilityStatus = document.getElementById('disability-status').value;
+            const minorityStatus  = document.getElementById('minority-status').value;
+
+            const userData = {
+                fullName, email, dob, gender, mobile, nationality,
+                address: { houseNumber, street, city, district, state, pincode, landmark },
+                employment: { status: employmentStatus, profession, industry, experience, incomeRange },
+                schemeProfile: {
+                    occupation: employmentStatus, ageGroup, income: incomeRange,
+                    education: educationLevel,
+                    hasDisability: disabilityStatus === 'yes',
+                    isMinority: minorityStatus === 'yes',
+                    isSeniorCitizen: ageGroup === '60+'
+                },
+                createdAt: new Date().toISOString(),
+                emailVerified: false
+            };
+
+            async function saveToFirestore(uid, data) {
+                const userRef = doc(db, 'users', uid);
+                let lastErr;
+                for (let attempt = 1; attempt <= 4; attempt++) {
+                    try {
+                        await setDoc(userRef, Object.assign({ uid: uid }, data));
+                        return;
+                    } catch (err) {
+                        lastErr = err;
+                        if (attempt < 4) await new Promise(r => setTimeout(r, 1000 * attempt));
+                    }
+                }
+                throw lastErr;
+            }
+
+            function waitForAuthReady(expectedUid) {
+                return new Promise(function(resolve) {
+                    const unsub = onAuthStateChanged(auth, function(user) {
+                        if (user && user.uid === expectedUid) { unsub(); resolve(); }
+                    });
+                    setTimeout(function() { unsub(); resolve(); }, 8000);
+                });
+            }
+
+            try {
+                let authUser = null;
+                let isOrphanRecovery = false;
+
+                try {
+                    const cred = await createUserWithEmailAndPassword(auth, email, password);
+                    authUser = cred.user;
+                } catch (authErr) {
+                    if (authErr.code === 'auth/email-already-in-use') {
+                        try {
+                            const signInCred = await signInWithEmailAndPassword(auth, email, password);
+                            authUser = signInCred.user;
+                            isOrphanRecovery = true;
+                        } catch (signInErr) {
+                            showSignupError('This email is already registered. Please go to the Login page.');
+                            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Complete Registration'; }
+                            return;
+                        }
+                    } else if (authErr.code === 'auth/weak-password') {
+                        showSignupError('Password is too weak. Use at least 6 characters.');
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Complete Registration'; }
+                        return;
+                    } else if (authErr.code === 'auth/invalid-email') {
+                        showSignupError('Invalid email address format.');
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Complete Registration'; }
+                        return;
+                    } else if (authErr.code === 'auth/network-request-failed') {
+                        showSignupError('Network error. Check your internet connection and try again.');
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Complete Registration'; }
+                        return;
+                    } else {
+                        showSignupError('Could not create account: ' + authErr.message);
+                        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Complete Registration'; }
+                        return;
+                    }
+                }
+
+                if (isOrphanRecovery) {
+                    try {
+                        const snap = await getDoc(doc(db, 'users', authUser.uid));
+                        if (snap.exists()) {
+                            showSignupError('This email is already fully registered. Please go to the Login page.');
+                            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Complete Registration'; }
+                            return;
+                        }
+                    } catch (_) {  }
+                }
+
+                await waitForAuthReady(authUser.uid);
+
+                try {
+                    await saveToFirestore(authUser.uid, userData);
+                } catch (dbErr) {
+                    if (!isOrphanRecovery) {
+                        try { await authUser.delete(); } catch (_) {}
+                    }
+                    showSignupError('Profile could not be saved: ' + dbErr.message + '. Please try again.');
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Complete Registration'; }
+                    return;
+                }
+
+                document.getElementById('success-name').textContent = fullName.split(' ')[0];
+                currentStep = 5;
+                updateStepDisplay();
+                setTimeout(() => { window.location.href = 'logged main.html'; }, 2000);
+
+            } catch (unexpectedErr) {
+                console.error('Unexpected signup error:', unexpectedErr);
+                showSignupError('An unexpected error occurred. Please try again.');
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Complete Registration'; }
+            }
+        });
+
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        document.getElementById('btn-next-1').addEventListener('click', function() {
+            goToStep(2);
+        });
+
+        document.getElementById('btn-back-2').addEventListener('click', function() {
+            goToStep(1);
+        });
+
+        document.getElementById('btn-next-2').addEventListener('click', function() {
+            goToStep(3);
+        });
+
+        document.getElementById('btn-back-3').addEventListener('click', function() {
+            goToStep(2);
+        });
+
+        document.getElementById('btn-next-3').addEventListener('click', function() {
+            goToStep(4);
+        });
+
+        document.getElementById('btn-back-4').addEventListener('click', function() {
+            goToStep(3);
+        });
+
+        document.getElementById('employment-status').addEventListener('change', function() {
+            updateProfessionFields();
+        });
+
+        document.getElementById('state').addEventListener('change', function() {
+            updateDistricts();
+        });
+    </script>
+</body>
+</html>
